@@ -1,0 +1,157 @@
+/* HTML body */
+body {
+    background-image: url("assets/images/wallpaper_max.jpg");
+}
+
+/* Címek */
+h1, h2 {
+    background-color: darkgoldenrod;
+    color: #222;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+/* Lista */
+.szin-lista {
+    list-style-type: square;
+}
+
+.app-lista {
+    list-style-type: disc;
+}
+
+/* Általános stílusosztály */
+em, p, .stilus {
+    background-color: lightgoldenrodyellow;
+    color: #222;
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+}
+
+nav div {
+    border-radius: 5px;
+    font-size: large;
+}
+
+/* Link */
+a:hover {
+    color: #fcce03;
+}
+
+a:visited {
+    color: #ff7300;
+}
+
+a {
+    color: #fcb103;
+}
+
+/* Keretezett div */
+/*div {
+    border: 1px dashed blueviolet;
+    padding-right: 10em;
+    border-bottom-color: aqua;
+    border-left-color: yellowgreen;
+    border-right-color: red;
+}*/
+
+/* Sakktábla téglalap */
+tr:nth-child(even) td:nth-child(even), tr:nth-child(odd) td:nth-child(odd), tr:nth-child(even) th:nth-child(even), tr:nth-child(odd) th:nth-child(odd) {
+    background: grey;
+}
+tr:nth-child(even) td:nth-child(odd), tr:nth-child(odd) td:nth-child(even), tr:nth-child(even) th:nth-child(odd), tr:nth-child(odd) th:nth-child(even) {
+    background: white;
+}
+
+/* Pódium */
+.podium {
+    display: flex;
+    color: rgb(115, 255, 0);
+    text-align: center;
+}
+
+.egy {
+    height: 120px;
+    width: 50px;
+    background-color: #222;
+    align-self: flex-end;
+    margin-left: 2px;
+    transition: height 2s;
+}
+
+.egy:hover {
+    height: 140px;
+}
+
+.ketto {
+    height: 80px;
+    width: 50px;
+    background-color: #555;
+    align-self: flex-end;
+    margin-left: 2px;
+    transition: height 2s;
+}
+
+.ketto:hover {
+    height: 100px;
+}
+
+.harom {
+    height: 40px;
+    width: 50px;
+    background-color: #999;
+    align-self: flex-end;
+    margin-left: 2px;
+    transition: height 2s;
+}
+
+.harom:hover {
+    height: 60px;
+}
+
+/* Fénykép */
+img {
+    width: 200px;
+    height: 283px;
+}
+
+img:active {
+    width: 220px;
+    height: 303px;
+}
+
+
+
+
+
+/* en irtam bele magamtol */
+
+/*.buttons {
+    background-color: blueviolet;
+    display: flex;
+    align-items: right;
+    justify-content: right;
+    margin-right: 5px;
+}
+
+.buttons button {
+    height: 2rem;
+    width: 7rem;
+    margin-right: 0.3rem;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    border: 0px;
+    background-color: white;
+    color: black;
+    border-radius: 5px;
+}
+
+footer {
+    background-color: blueviolet;
+}
+
+table {
+    border: 1px solid;
+}
+
+th {
+    border-bottom: 1px solid;
+}*/
