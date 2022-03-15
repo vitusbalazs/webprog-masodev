@@ -1,9 +1,13 @@
 /* HTML body */
+/* A HTML törzsében legyen (a szöveggel együtt gördülő) háttérkép (lehetőleg ne legyen túl sötét kép),
+mely az x és y tengely mentén egyaránt ismétlődik. */
 body {
     background-image: url("assets/images/wallpaper_max.jpg");
 }
 
 /* Címek */
+/* A HTML törzsében legyen (a szöveggel együtt gördülő) háttérkép (lehetőleg ne legyen túl sötét kép),
+mely az x és y tengely mentén egyaránt ismétlődik. */
 h1, h2 {
     background-color: darkgoldenrod;
     color: #222;
@@ -11,6 +15,8 @@ h1, h2 {
 }
 
 /* Lista */
+/* Definiáljunk (és használjunk a HTML oldalon) két különböző stílusú (sorszám nélküli) listát.
+Használjunk csak az illető elemre vonatkozó stílusosztályokat (class) */
 .szin-lista {
     list-style-type: square;
 }
@@ -20,40 +26,66 @@ h1, h2 {
 }
 
 /* Általános stílusosztály */
-em, p, .stilus {
+/* Definiáljunk (és használjunk a HTML oldalon) két különböző stílusú (sorszám nélküli) listát.
+Használjunk csak az illető elemre vonatkozó stílusosztályokat (class) */
+em.stilus, p.stilus {
     background-color: lightgoldenrodyellow;
     color: #222;
     font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+    text-decoration: dotted;
 }
 
-nav div {
+/* Adjuk meg (kontextussal megadott szelektort használva) egy nav elemben elhelyezkedő div elem
+stílusát (kerekített szegély, szövegméret) */
+nav > div {
     border-radius: 5px;
     font-size: large;
 }
 
 /* Link */
-a:hover {
+/* Definiáljunk két különböző hivatkozás (link) típust, melyeknek más és más a színe, szövegdíszítése
+ha rámegyünk az egérrel, ha aktív, ha már meglátogattuk */
+a.egy:hover {
     color: #fcce03;
 }
 
-a:visited {
+a.egy:visited {
     color: #ff7300;
 }
 
-a {
+a.egy {
     color: #fcb103;
 }
 
+a.ketto:hover {
+    color: rgb(19, 19, 235);
+}
+
+a.ketto:visited {
+    color: rgb(54, 54, 128);
+}
+
+a.ketto {
+    color: rgb(120, 120, 250);
+}
+
 /* Keretezett div */
-/*div {
+/* Definiáljunk egy olyan div stílust, mely be van keretezve szaggatott vonallal. A szöveg legyen balra
+tolódva a kereten belül (a jobboldali behúzás–padding–legyen nagyobb). A keret elemei (alsó, felső,
+stb. rész) legyenek más-más színűek */
+div {
     border: 1px dashed blueviolet;
-    padding-right: 10em;
     border-bottom-color: aqua;
     border-left-color: yellowgreen;
     border-right-color: red;
-}*/
+    text-align: left;
+    padding-right: 10em;
+}
 
 /* Sakktábla téglalap */
+/*  Definiáljuk a táblázat esetén két különböző cella-stílust (a két stílus pepita -lásd sakktábla- minta
+szerint váltakozzon). Ne használjunk osztályokat, a HTML-be ne kelljen kézzel jelölőket írni a
+cellákhoz. */
 tr:nth-child(even) td:nth-child(even), tr:nth-child(odd) td:nth-child(odd), tr:nth-child(even) th:nth-child(even), tr:nth-child(odd) th:nth-child(odd) {
     background: grey;
 }
@@ -62,6 +94,8 @@ tr:nth-child(even) td:nth-child(odd), tr:nth-child(odd) td:nth-child(even), tr:n
 }
 
 /* Pódium */
+/* Rajzoljunk különböző színű téglalapokból díjkiosztó pódiumot (1., 2., 3 helyezés vagy arany-, ezüst-,
+bronzérem felirattal) */
 .podium {
     display: flex;
     color: rgb(115, 255, 0);
@@ -77,10 +111,6 @@ tr:nth-child(even) td:nth-child(odd), tr:nth-child(odd) td:nth-child(even), tr:n
     transition: height 2s;
 }
 
-.egy:hover {
-    height: 140px;
-}
-
 .ketto {
     height: 80px;
     width: 50px;
@@ -88,10 +118,6 @@ tr:nth-child(even) td:nth-child(odd), tr:nth-child(odd) td:nth-child(even), tr:n
     align-self: flex-end;
     margin-left: 2px;
     transition: height 2s;
-}
-
-.ketto:hover {
-    height: 100px;
 }
 
 .harom {
@@ -103,11 +129,24 @@ tr:nth-child(even) td:nth-child(odd), tr:nth-child(odd) td:nth-child(even), tr:n
     transition: height 2s;
 }
 
+/* CSS3 átmenetek (transition) segítségével oldjuk meg, hogy a téglalapok mérete változzon
+amennyiben fölé visszük a kurzort. Ne egyből változzon ez a tulajdonság, hanem graduálisan 2
+másodperc folyamán. */
+.egy:hover {
+    height: 140px;
+}
+
+.ketto:hover {
+    height: 100px;
+}
+
 .harom:hover {
     height: 60px;
 }
 
 /* Fénykép */
+/* Arra vonatkozó kommentek, hogy a második résznél szereplő követelmények melyik
+részét hol használtuk */
 .CJPhoto {
     width: 200px;
     height: 283px;
