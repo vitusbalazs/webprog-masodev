@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset='utf-8'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <title>Lab2 - Vitus Balázs - vbim2101</title>
+    <meta name='viewport' content='width=device-width, initial-scale=1'>
+    <link rel='stylesheet' type='text/css' media='screen' href='main.css'>
+</head>
+<body>
+    <form action="#" method="post">
+        Name:
+        <input type="text" name="Csaladnev" id="csaladnev" pattern="[A-Z][a-z]+ [A-Z][a-z]+">
+        <br>
+        Date of birth:
+        <input type="date" name="Date of birth" id="birthday">
+        <br>
+        Email address:
+        <input type="email" name="E-mail cim" id="email" onBlur="testEmail()">
+        <br>
+        Favourite website URL:
+        <input type="url" name="Kedvenc weboldal" id="favweb" onBlur="testWebsite()">
+        <br>
+
+        <br>
+        Operator(+,-,*,/):
+        <input type="text" name="Operator" id="operator" pattern="^[+\-*\/]{1}$" value="+">
+        <br>
+        Number between 5 and 10:
+        <input type="number" name="Number" id="number" min="5" max="10" value="5">
+        <br>
+
+        <input id="submit" type="submit" value="submitForm" onClick="validateForm()"> <!-- work in progress -->
+    </form>
+
+    <p onclick="JSProblem()">GO!</p>
+
+    <canvas id="myCanvas" width="160" height="210" style="border:3px solid #00ff00;"></canvas>
+    <br>
+    <button id="jsresults" onclick="jsresults()">Kiertekeles</button>
+
+    <footer>
+        <p id="modifyDate"></p>
+    </footer>
+
+    <script src='main.js'></script>
+</body>
+</html>
