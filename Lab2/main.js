@@ -9,12 +9,26 @@ function testEmail() {
     }
 }
 
+function testEmail2() {
+    let email = document.getElementById("email").value;
+    if (!(email.endsWith("@gmail.com") || email.endsWith("@yahoo.com"))) {
+        alert("You can only submit @gmail.com and @yahoo.com e-mails!");
+    }
+}
+
 function testWebsite() {
     let website = document.getElementById("favweb").value;
     if (website.match(/https:\/\/(?:www\.)*[A-Za-z0-9]*\.[A-Za-z0-9]*\..+/)) {
         return true;
     } else {
         return false;
+    }
+}
+
+function testWebsite2() {
+    let website = document.getElementById("favweb").value;
+    if (!(website.match(/https:\/\/(?:www\.)*[A-Za-z0-9]*\.[A-Za-z0-9]*\..+/))) {
+        alert("This is not a valid subdomain.domain website!");
     }
 }
 
@@ -28,7 +42,7 @@ function validateForm() {
     let validEmail = document.forms.formid.email.validity.valid;
     let validWeb = document.forms.formid.favweb.validity.valid;
     let validOperator = (document.getElementById("operator").value.length != 0);
-    let validNumber = (parseInt(document.getElementById("number").value) >= 5 && parseInt(document.getElementById("number").value) <= 10)
+    let validNumber = (parseInt(document.getElementById("number").value) >= 5 && parseInt(document.getElementById("number").value) <= 10);
 
     // ha a validalas oke, akkor leveszi a submitrol a disabled dolgot, majd return true, maskepp false
     if (myEmailTest && myWebTest && validEmail && validWeb && validOperator && validNumber) {
@@ -42,7 +56,18 @@ function validateForm() {
 // ha a submitre nyomok es megsem valid a form, akkor hibauzenet (azert kellett kulon szedjem mert onChange mindenre lefut a validalas a submit gomb elohozasa miatt)
 function validateFormSubmit() {
     if (!validateForm()) {
-        alert("Hiba validalas kozben!");
+        if (document.forms.formid.email.validity.valid)
+            alert("The browser couldn't validate the given e-mail");
+        else if (document.forms.formid.favweb.validity.valid)
+            alert("The browser couldn't validate the given link");
+        else if (testEmail())
+            alert("The e-mail isn't a yahoo or gmail e-mail");
+        else if (testWebsite())
+            alert("The link isn't valid");
+        else if ((document.getElementById("operator").value.length != 0))
+            alert("The operator isn't valid");
+        else if((parseInt(document.getElementById("number").value) >= 5 && parseInt(document.getElementById("number").value) <= 10))
+            alert("The number isn't valid");
         return false;
     }
     else
@@ -137,12 +162,12 @@ function redrawCanvas() {
         if (i == activeNow)
             ctx.strokeStyle = "#FF0000";
         else
-            ctx.strokeStyle = "#000000";
+            ctx.strokeStyle = "#0000FF";
         // negyzet kirajzolasa
         ctx.strokeRect(15, i*20 + 7, 70, 15);
         // majd ugyanez csak a masodik oszlopra es ott mindig fekete negyzet
         ctx.fillText(results[i], 120, (i + 1) * 20);
-        ctx.strokeStyle = "#000000";
+        ctx.strokeStyle = "#0000FF";
         ctx.strokeRect(115, i*20 + 7, 30, 15);
 
         // vonalak kirajzolasa (-1 jelzi hogy egy elemtol nem kell meg vonalat huzni sehova)
@@ -157,7 +182,7 @@ function redrawCanvas() {
             else if (showResults)
                 ctx.strokeStyle = "#FF0000";
             else
-                ctx.strokeStyle = "#000000";
+                ctx.strokeStyle = "#0000FF";
             ctx.stroke();
         }
     }
