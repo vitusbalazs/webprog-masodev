@@ -70,7 +70,7 @@ function validateFormSubmit() {
             errors += "The operator isn't valid\n";
         if(parseInt(document.getElementById("number").value) < 5 || parseInt(document.getElementById("number").value) > 10)
             errors += "The number is not valid\n";
-        alert(errors);
+        document.getElementById("errors").innerHTML = errors;
         return false;
     }
     else
