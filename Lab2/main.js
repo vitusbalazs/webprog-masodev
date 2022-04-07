@@ -2,7 +2,8 @@ let showSubmit = false;
 
 function testEmail() {
     let email = document.getElementById("email").value;
-    if (email.endsWith("@gmail.com") || email.endsWith("@yahoo.com")) {
+    let validEmail = document.forms.formid.email.validity.valid;
+    if ((email.endsWith("@gmail.com") || email.endsWith("@yahoo.com")) && validEmail) {
         return true;
     } else {
         return false;
@@ -10,15 +11,15 @@ function testEmail() {
 }
 
 function testEmail2() {
-    let email = document.getElementById("email").value;
-    if (!(email.endsWith("@gmail.com") || email.endsWith("@yahoo.com"))) {
+    if (!testEmail()) {
         alert("You can only submit @gmail.com and @yahoo.com e-mails!");
     }
 }
 
 function testWebsite() {
     let website = document.getElementById("favweb").value;
-    if (website.match(/https:\/\/(?:www\.)*[A-Za-z0-9]*\.[A-Za-z0-9]*\..+/)) {
+    let validWeb = document.forms.formid.favweb.validity.valid;
+    if ((website.match(/http[s]{0,1}:\/\/(?:www\.)*[A-Za-z0-9]*\.[A-Za-z0-9]*\..+/)) && validWeb) {
         return true;
     } else {
         return false;
@@ -26,8 +27,7 @@ function testWebsite() {
 }
 
 function testWebsite2() {
-    let website = document.getElementById("favweb").value;
-    if (!(website.match(/https:\/\/(?:www\.)*[A-Za-z0-9]*\.[A-Za-z0-9]*\..+/))) {
+    if (!testWebsite()) {
         alert("This is not a valid subdomain.domain website!");
     }
 }
@@ -49,6 +49,7 @@ function validateForm() {
         document.getElementById("submit").disabled = false;
         return true;
     } else {
+        document.getElementById("submit").disabled = true;
         return false;
     }
 }
@@ -56,18 +57,20 @@ function validateForm() {
 // ha a submitre nyomok es megsem valid a form, akkor hibauzenet (azert kellett kulon szedjem mert onChange mindenre lefut a validalas a submit gomb elohozasa miatt)
 function validateFormSubmit() {
     if (!validateForm()) {
+        let errors = "You have the following errors:\n"
         if (document.forms.formid.email.validity.valid)
-            alert("The browser couldn't validate the given e-mail");
-        else if (document.forms.formid.favweb.validity.valid)
-            alert("The browser couldn't validate the given link");
-        else if (testEmail())
-            alert("The e-mail isn't a yahoo or gmail e-mail");
-        else if (testWebsite())
-            alert("The link isn't valid");
-        else if ((document.getElementById("operator").value.length != 0))
-            alert("The operator isn't valid");
-        else if((parseInt(document.getElementById("number").value) >= 5 && parseInt(document.getElementById("number").value) <= 10))
-            alert("The number isn't valid");
+            errors += "The browser couldn't validate the given e-mail\n";
+        if (document.forms.formid.favweb.validity.valid)
+            errors += "The browser couldn't validate the given link\n";
+        if (testEmail())
+            errors += "The e-mail isn't a yahoo or gmail e-mail\n";
+        if (testWebsite())
+            errors += "The link isn't valid\n";
+        if ((document.getElementById("operator").value.length != 0))
+            errors += "The operator isn't valid\n";
+        if(parseInt(document.getElementById("number").value) < 5 || parseInt(document.getElementById("number").value) > 10)
+            errors += "The number is not valid\n";
+        alert(errors);
         return false;
     }
     else
@@ -129,7 +132,7 @@ function JSProblem() {
             case "/":
                 szam1 = Math.floor(Math.random() * 100) + 1;
                 szam2 = Math.floor(Math.random() * 100) + 1;
-                results.push(szam1 / szam2);
+                results.push((szam1 / szam2).toFixed(3));
                 break;
         }
         
@@ -168,7 +171,7 @@ function redrawCanvas() {
         // majd ugyanez csak a masodik oszlopra es ott mindig fekete negyzet
         ctx.fillText(results[i], 120, (i + 1) * 20);
         ctx.strokeStyle = "#0000FF";
-        ctx.strokeRect(115, i*20 + 7, 30, 15);
+        ctx.strokeRect(115, i*20 + 7, 50, 15);
 
         // vonalak kirajzolasa (-1 jelzi hogy egy elemtol nem kell meg vonalat huzni sehova)
         if (firstColumnPair[i] != -1) {
@@ -212,7 +215,7 @@ window.onload = () => {
                     }
                 }
             }
-            else if (x >= 115 && x <= 115 + 30)
+            else if (x >= 115 && x <= 115 + 50)
             {
                 // masodik oszlop
                 if (y >= i*20 + 7 && y <= i*20 + 7 + 15)
@@ -249,7 +252,7 @@ function getSum(i) {
             sum = tomb1[i] * tomb2[i];
             break;
         case "/":
-            sum = tomb1[i] / tomb2[i];
+            sum = (tomb1[i] / tomb2[i]).toFixed(3);
             break;
     }
     return sum;
