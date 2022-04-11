@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset='utf-8'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <title>Lab2 - Vitus Balázs - vbim2101</title>
+    <meta name='viewport' content='width=device-width, initial-scale=1'>
+    <link rel='stylesheet' type='text/css' media='screen' href='main.css'>
+</head>
+<body>
+    <form action="#" method="post" name="formm" id="formid" onsubmit="JSProblem(); return false;">
+        Name:
+        <input type="text" name="Nev" id="nev" pattern="[A-Z][a-z]+ [A-Z][a-z]+" required onChange="validateForm()">
+        <br>
+        Date of birth:
+        <input type="date" name="Date of birth" id="birthday" required onChange="validateForm()">
+        <br>
+        Email address:
+        <input type="email" name="E-mail cim" id="email" onBlur="testEmail2()" required onChange="validateForm()">
+        <br>
+        Favourite website URL:
+        <input type="url" name="Kedvenc weboldal" id="favweb" onBlur="testWebsite2()" required onChange="validateForm()">
+        <br>
+
+        <br>
+        Operator(+,-,*,/):
+        <input type="text" name="Operator" id="operator" pattern="^[+\-*\/]{1}$" required  onChange="validateForm()">
+        <br>
+        Number between 5 and 10:
+        <input type="number" name="Number" id="number" min="5" max="10" required  onChange="validateForm()">
+        <br>
+
+        <p id="errors"></p>
+
+        <input id="submit" type="submit" value="submitForm" onClick="validateFormSubmit()">
+    </form>
+
+    <canvas id="myCanvas" width="200" height="210" style="border:3px solid #00ff00;"></canvas>
+    <br>
+    <button id="jsresults" onclick="jsresults()">Kiertekeles</button>
+
+    <footer>
+        <p id="modifyDate"></p>
+    </footer>
+
+    <!-- Le kellett ide tennem a scriptet, maskent a footerben levo paragraph kesobb toltodott be es nem tudtam felulirni JS-bol -->
+    <script src='main.js'></script>
+</body>
+</html>
