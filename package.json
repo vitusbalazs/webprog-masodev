@@ -1,0 +1,19 @@
+{
+  "name": "lab-vbim2101",
+  "version": "1.0.0",
+  "description": "npm project",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://gitlab.com/ubb-webprog/labs2022/lab-vbim2101.git"
+  },
+  "author": "vitusbalazs",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://gitlab.com/ubb-webprog/labs2022/lab-vbim2101/issues"
+  },
+  "homepage": "https://gitlab.com/ubb-webprog/labs2022/lab-vbim2101#readme"
+}
