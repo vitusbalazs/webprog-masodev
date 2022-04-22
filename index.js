@@ -1,7 +1,7 @@
 import express from 'express';
 import path from 'path';
 import morgan from 'morgan';
-import eformidable from 'express-formidable'
+import eformidable from 'express-formidable';
 
 // a mappa ahonnan statikus tartalmat szolgálunk
 // process.cwd() - globális változó, az aktuális katalógusra mutat a szerveren
@@ -16,18 +16,17 @@ app.use(morgan('tiny'));
 // express static middleware: statikus állományokat szolgál fel
 app.use(express.static(staticDir));
 
-
 // FORM VALIDATION
 
-let hirdetesek = [
-    [1,"Libertatii 9","Kézdivásárhely",15,5,5,new Date("04/02/2022")],
-    [2,"Libertatii 9","Kézdivásárhely",15,15,5,new Date("04/02/2022")],
-    [3,"Libertatii 9","Kézdivásárhely",15,25,5,new Date("04/02/2022")],
-    [4,"Libertatii 9","Kézdivásárhely",15,45,5,new Date("04/02/2022")],
-    [5,"Libertatii 9","Sepsiszentgyörgy",15,6,5,new Date("04/02/2022")],
-    [6,"Libertatii 9","Kézdivásárhely",15,35,5,new Date("04/02/2022")]
+const hirdetesek = [
+    [1, 'Libertatii 9', 'Kézdivásárhely', 15, 5, 5, new Date('04/02/2022')],
+    [2, 'Libertatii 9', 'Kézdivásárhely', 15, 15, 5, new Date('04/02/2022')],
+    [3, 'Libertatii 9', 'Kézdivásárhely', 15, 25, 5, new Date('04/02/2022')],
+    [4, 'Libertatii 9', 'Kézdivásárhely', 15, 45, 5, new Date('04/02/2022')],
+    [5, 'Libertatii 9', 'Kézdivásárhely', 15, 6, 5, new Date('04/02/2022')],
+    [6, 'Libertatii 9', 'Kézdivásárhely', 15, 35, 5, new Date('04/02/2022')],
 ];
-let photos = [];
+const photos = [];
 
 // standard kérésfeldolgozással kapjuk a body tartalmát
 // app.use(express.urlencoded({ extended: true }));
@@ -35,12 +34,31 @@ let photos = [];
 app.use(eformidable({ staticDir }));
 
 function validateDate(date1, date2) {
-    if (date1.getMonth() == date2.getMonth() && date1.getDate() == date2.getDate() && date1.getFullYear() == date2.getFullYear()) {
-        return true;
+    if (date1.getMonth() === date2.getMonth() && date1.getDate() === date2.getDate()) {
+        if (date1.getFullYear() === date2.getFullYear()) {
+            return true;
+        }
     }
-    else {
+    return false;
+}
+
+function validateNew(cim, telepules, felszin, ar, szobak) {
+    if (cim.length < 3) {
         return false;
     }
+    if (telepules.length < 3) {
+        return false;
+    }
+    if (felszin <= 0) {
+        return false;
+    }
+    if (ar < 0) {
+        return false;
+    }
+    if (szobak <= 0) {
+        return false;
+    }
+    return true;
 }
 
 app.post('/submitNew', (req, res) => {
@@ -54,11 +72,10 @@ app.post('/submitNew', (req, res) => {
     const szobak = req.fields.SzobakSzama;
     const datum = new Date(req.fields.Datum);
 
-    if (cim.length < 3 || telepules.length < 3 || felszin <= 0 || ar < 0 || szobak <= 0 || !validateDate(datum, new Date())) {
-        res.end(`Hibás adatokat adtál meg!`);
-    }
-    else {
-        let hirdetes = [advID, cim, telepules, felszin, ar, szobak, datum];
+    if (!validateNew() || !validateDate(datum, new Date())) {
+        res.end('Hibás adatokat adtál meg!');
+    } else {
+        const hirdetes = [advID, cim, telepules, felszin, ar, szobak, datum];
         /*
             0 - ID
             1 - Cím
@@ -72,8 +89,6 @@ app.post('/submitNew', (req, res) => {
 
         res.end(`Your announcement ID is: ${advID}`);
     }
-
-    
 });
 
 app.post('/submitPhoto', (req, res) => {
@@ -84,9 +99,8 @@ app.post('/submitPhoto', (req, res) => {
 
     if (photoID > hirdetesek.length) {
         res.end(`No advertisment with this ID: ${photoID}`);
-    }
-    else {
-        let newPhoto = [photoID, fileHandler];
+    } else {
+        const newPhoto = [photoID, fileHandler];
         photos.push(newPhoto);
         res.end(`The photo has been uploaded successfully to Advertisment ID: ${photoID}`);
     }
@@ -108,35 +122,25 @@ app.post('/search', (req, res) => {
         6 - Dátum
     */
 
-    let found = `These advertisments fit your criteria:\n`;
+    let found = 'These advertisments fit your criteria:\n';
     let atLeastOne = false;
-    hirdetesek.forEach(adv => {
-        if (adv[4] >= minAr && adv[4] <= maxAr && adv[2] == telepules) {
-            if (!atLeastOne)
+    hirdetesek.forEach((adv) => {
+        if (adv[4] >= minAr && adv[4] <= maxAr && adv[2] === telepules) {
+            if (!atLeastOne) {
                 atLeastOne = true;
+            }
             found += `ID: ${adv[0]}, Address: ${adv[1]}, Location: ${adv[2]}, Surface area: ${adv[3]}, Price: ${adv[4]}, Number of rooms: ${adv[5]}, Date published: ${adv[6]}\n`;
         }
-    })
+    });
 
     if (atLeastOne) {
         res.end(found);
+    } else {
+        res.end('No advertisments fit your criteria!');
     }
-    else {
-        res.end(`No advertisments fit your criteria!`);
-    }
-})
+});
 
 app.listen(8080, () => { console.log('Server listening on http://localhost:8080/ ...'); });
-
-
-
-
-
-
-
-
-
-
 
 // const respBody = `Feltöltés érkezett:
 //     állománynév: ${fileHandler.name}

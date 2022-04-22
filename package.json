@@ -2,7 +2,7 @@
   "name": "lab-vbim2101",
   "version": "1.0.0",
   "description": "npm project",
-  "main": "main.js",
+  "main": "index.js",
   "type": "module",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -18,12 +18,13 @@
   },
   "homepage": "https://gitlab.com/ubb-webprog/labs2022/lab-vbim2101#readme",
   "devDependencies": {
-    "nodemon": "^2.0.15"
+    "eslint": "^8.13.0",
+    "eslint-config-airbnb-base": "^15.0.0",
+    "eslint-plugin-import": "^2.26.0"
   },
   "dependencies": {
     "express": "^4.17.3",
     "express-formidable": "^1.2.0",
-    "formidable": "^2.0.1",
     "morgan": "^1.10.0",
     "path": "^0.12.7"
   }
