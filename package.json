@@ -2,7 +2,8 @@
   "name": "lab-vbim2101",
   "version": "1.0.0",
   "description": "npm project",
-  "main": "index.js",
+  "main": "main.js",
+  "type": "module",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -15,5 +16,15 @@
   "bugs": {
     "url": "https://gitlab.com/ubb-webprog/labs2022/lab-vbim2101/issues"
   },
-  "homepage": "https://gitlab.com/ubb-webprog/labs2022/lab-vbim2101#readme"
+  "homepage": "https://gitlab.com/ubb-webprog/labs2022/lab-vbim2101#readme",
+  "devDependencies": {
+    "nodemon": "^2.0.15"
+  },
+  "dependencies": {
+    "express": "^4.17.3",
+    "express-formidable": "^1.2.0",
+    "formidable": "^2.0.1",
+    "morgan": "^1.10.0",
+    "path": "^0.12.7"
+  }
 }
