@@ -12,7 +12,9 @@ function testEmail() {
 
 function testEmail2() {
     if (!testEmail()) {
-        alert("You can only submit @gmail.com and @yahoo.com e-mails!");
+        document.getElementById("errors").innerHTML = "You can only submit @gmail.com and @yahoo.com e-mails!";
+    } else {
+        document.getElementById("errors").innerHTML = "";
     }
 }
 
@@ -28,7 +30,9 @@ function testWebsite() {
 
 function testWebsite2() {
     if (!testWebsite()) {
-        alert("This is not a valid subdomain.domain website!");
+        document.getElementById("errors").innerHTML = "This is not a valid subdomain.domain website!";
+    } else {
+        document.getElementById("errors").innerHTML = "";
     }
 }
 
@@ -43,9 +47,11 @@ function validateForm() {
     let validWeb = document.forms.formid.favweb.validity.valid;
     let validOperator = (document.getElementById("operator").value.length != 0);
     let validNumber = (parseInt(document.getElementById("number").value) >= 5 && parseInt(document.getElementById("number").value) <= 10);
+    let validName = document.forms.formid.nev.validity.valid;
+    let myValidName = (document.getElementById("nev").value).match(/[A-Z][a-z]+ [A-Z][a-z]+/);
 
     // ha a validalas oke, akkor leveszi a submitrol a disabled dolgot, majd return true, maskepp false
-    if (myEmailTest && myWebTest && validEmail && validWeb && validOperator && validNumber) {
+    if (myEmailTest && myWebTest && validEmail && validWeb && validOperator && validNumber && validName && myValidName) {
         document.getElementById("submit").disabled = false;
         return true;
     } else {
@@ -58,10 +64,14 @@ function validateForm() {
 function validateFormSubmit() {
     if (!validateForm()) {
         let errors = "You have the following errors:\n"
+        if (document.forms.formid.nev.validity.valid)
+            errors += "The browser couldn't validate the given name\n";
         if (document.forms.formid.email.validity.valid)
             errors += "The browser couldn't validate the given e-mail\n";
         if (document.forms.formid.favweb.validity.valid)
             errors += "The browser couldn't validate the given link\n";
+        if (!(document.getElementById("nev").value).match(/[A-Z][a-z]+ [A-Z][a-z]+/))
+            errors += "The name you gave is not valid\n";
         if (testEmail())
             errors += "The e-mail isn't a yahoo or gmail e-mail\n";
         if (testWebsite())

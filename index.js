@@ -2,6 +2,7 @@ import express from 'express';
 import path from 'path';
 import morgan from 'morgan';
 import eformidable from 'express-formidable';
+import fs from 'fs';
 
 // a mappa ahonnan statikus tartalmat szolgálunk
 // process.cwd() - globális változó, az aktuális katalógusra mutat a szerveren
@@ -72,19 +73,11 @@ app.post('/submitNew', (req, res) => {
     const szobak = req.fields.SzobakSzama;
     const datum = new Date(req.fields.Datum);
 
-    if (!validateNew() || !validateDate(datum, new Date())) {
+    if (!validateNew(cim, telepules, felszin, ar, szobak) || !validateDate(datum, new Date())) {
+        res.statusCode = 400;
         res.end('Hibás adatokat adtál meg!');
     } else {
         const hirdetes = [advID, cim, telepules, felszin, ar, szobak, datum];
-        /*
-            0 - ID
-            1 - Cím
-            2 - Település
-            3 - Felszínterület
-            4 - Ár
-            5 - Szobák száma
-            6 - Dátum
-        */
         hirdetesek.push(hirdetes);
 
         res.end(`Your announcement ID is: ${advID}`);
@@ -98,20 +91,23 @@ app.post('/submitPhoto', (req, res) => {
     const photoID = req.fields.FenykepID;
 
     if (photoID > hirdetesek.length) {
+        res.statusCode = 400;
         res.end(`No advertisment with this ID: ${photoID}`);
     } else {
         const newPhoto = [photoID, fileHandler];
         photos.push(newPhoto);
+
+        fs.copyFile(fileHandler.path, path.join(process.cwd(), 'uploaded', fileHandler.name), (err) => {
+            if (err) {
+                console.log('Error Found:', err);
+            }
+        });
+
         res.end(`The photo has been uploaded successfully to Advertisment ID: ${photoID}`);
     }
 });
 
 app.post('/search', (req, res) => {
-    res.set('Content-Type', 'text/plain; charset=utf-8');
-    const telepules = req.fields.Telepules;
-    const minAr = req.fields.MinAr;
-    const maxAr = req.fields.MaxAr;
-
     /*
         0 - ID
         1 - Cím
@@ -121,6 +117,10 @@ app.post('/search', (req, res) => {
         5 - Szobák száma
         6 - Dátum
     */
+    res.set('Content-Type', 'text/plain; charset=utf-8');
+    const telepules = req.fields.Telepules;
+    const minAr = req.fields.MinAr;
+    const maxAr = req.fields.MaxAr;
 
     let found = 'These advertisments fit your criteria:\n';
     let atLeastOne = false;
@@ -136,6 +136,7 @@ app.post('/search', (req, res) => {
     if (atLeastOne) {
         res.end(found);
     } else {
+        res.statusCode = 400;
         res.end('No advertisments fit your criteria!');
     }
 });

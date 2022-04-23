@@ -25,6 +25,7 @@
   "dependencies": {
     "express": "^4.17.3",
     "express-formidable": "^1.2.0",
+    "fs": "^0.0.1-security",
     "morgan": "^1.10.0",
     "path": "^0.12.7"
   }
