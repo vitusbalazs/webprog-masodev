@@ -5,8 +5,6 @@ import eformidable from 'express-formidable';
 import fs from 'fs';
 
 // a mappa ahonnan statikus tartalmat szolgálunk
-// process.cwd() - globális változó, az aktuális katalógusra mutat a szerveren
-// SOSE a gyökeret tegyünk publikussá
 const staticDir = path.join(process.cwd(), 'static');
 
 // inicializáljuk az express alkalmazást
@@ -29,8 +27,6 @@ const hirdetesek = [
 ];
 const photos = [];
 
-// standard kérésfeldolgozással kapjuk a body tartalmát
-// app.use(express.urlencoded({ extended: true }));
 // formidable-lel dolgozzuk fel a kéréseket
 app.use(eformidable({ staticDir }));
 
@@ -108,15 +104,6 @@ app.post('/submitPhoto', (req, res) => {
 });
 
 app.post('/search', (req, res) => {
-    /*
-        0 - ID
-        1 - Cím
-        2 - Település
-        3 - Felszínterület
-        4 - Ár
-        5 - Szobák száma
-        6 - Dátum
-    */
     res.set('Content-Type', 'text/plain; charset=utf-8');
     const telepules = req.fields.Telepules;
     const minAr = req.fields.MinAr;
@@ -142,14 +129,3 @@ app.post('/search', (req, res) => {
 });
 
 app.listen(8080, () => { console.log('Server listening on http://localhost:8080/ ...'); });
-
-// const respBody = `Feltöltés érkezett:
-//     állománynév: ${fileHandler.name}
-//     név a szerveren: ${fileHandler.path}
-//     privát: ${privateFile}
-// `;
-
-// console.log(respBody);
-// res.set('Content-Type',
-// 'text/plain;charset=utf-8');
-// res.end(respBody);

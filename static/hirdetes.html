@@ -12,17 +12,17 @@
     <div id="forms">
         <form method="POST" action="/submitNew">
             <p>Lakáshírdetés feladása</p>
-            Cím:
+            <label for="lakascim">Cím:</label>
             <input type="text" name="Cim" id="lakascim" required>
-            Település:
+            <label for="lakastelepules">Település:</label>
             <input type="text" name="Telepules" id="lakastelepules" required>
-            Felszínterület:
+            <label for="lakasfelszin">Felszínterület:</label>
             <input type="number" name="Felszinterulet" id="lakasfelszin" min="1" required>
-            Ár:
+            <label for="lakasar">Ár:</label>
             <input type="number" name="Ar" id="lakasar" min="1" required>
-            Szobák száma:
+            <label for="lakasszobak">Szobák száma:</label>
             <input type="number" name="SzobakSzama" id="lakasszobak" min="1" required>
-            Dátum:
+            <label for="lakasdatum">Dátum:</label>
             <input type="date" name="Datum" id="lakasdatum" required>
 
             <input type="submit" value="Feltöltés!">
@@ -32,9 +32,9 @@
 
         <form method="POST" action="/submitPhoto" enctype="multipart/form-data">
             <p>Kép feltöltése hírdetéshez</p>
-            Hírdetés ID:
+            <label for="feltoltesid">Hírdetés ID:</label>
             <input type="number" name="FenykepID" id="feltoltesid" min="1" required>
-            Fénykép:
+            <label for="feltoltesfoto">Fénykép:</label>
             <input type="file" name="Fenykep" id="feltoltesfoto" required>
 
             <input type="submit" value="Feltöltés!">
@@ -44,11 +44,11 @@
 
         <form method="POST" action="/search">
             <p>Lakás keresése</p>
-            Település
+            <label for="keresestelepules">Település</label>
             <input type="text" name="Telepules" id="keresestelepules" required>
-            Min. Ár:
+            <label for="keresesmin">Min. Ár:</label>
             <input type="number" name="MinAr" id="keresesmin" min="0" required>
-            Max. Ár:
+            <label for="keresesmax">Max. Ár:</label>
             <input type="number" name="MaxAr" id="keresesmax" min="0" required>
 
             <input type="submit" value="Keresés!">
