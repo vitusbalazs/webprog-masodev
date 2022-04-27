@@ -1,0 +1,23 @@
+#forms {
+    display: flex;
+    align-items: center;
+}
+
+form {
+    margin: 10px;
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+    border: 1px solid black;
+    width: 300px;
+}
+
+form > * {
+    margin: 5px;
+}
+
+form > p {
+    text-align: center;
+}
