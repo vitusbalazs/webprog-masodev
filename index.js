@@ -3,6 +3,7 @@ import path from 'path';
 import morgan from 'morgan';
 import eformidable from 'express-formidable';
 import fs from 'fs';
+import { getAdvertisments, insertAdvertisment, insertPhoto } from './db.js';
 
 // a mappa ahonnan statikus tartalmat szolgálunk
 const staticDir = path.join(process.cwd(), 'static');
@@ -16,19 +17,17 @@ app.use(morgan('tiny'));
 app.use(express.static(staticDir));
 
 // FORM VALIDATION
-
-const hirdetesek = [
-    [1, 'Libertatii 9', 'Kézdivásárhely', 15, 5, 5, new Date('04/02/2022')],
-    [2, 'Libertatii 9', 'Kézdivásárhely', 15, 15, 5, new Date('04/02/2022')],
-    [3, 'Libertatii 9', 'Kézdivásárhely', 15, 25, 5, new Date('04/02/2022')],
-    [4, 'Libertatii 9', 'Kézdivásárhely', 15, 45, 5, new Date('04/02/2022')],
-    [5, 'Libertatii 9', 'Kézdivásárhely', 15, 6, 5, new Date('04/02/2022')],
-    [6, 'Libertatii 9', 'Kézdivásárhely', 15, 35, 5, new Date('04/02/2022')],
-];
+const hirdetesek = [];
 const photos = [];
 
 // formidable-lel dolgozzuk fel a kéréseket
 app.use(eformidable({ staticDir }));
+
+app.get('/', async (req, res) => {
+    const adv = await getAdvertisments(false);
+    res.type('.html');
+    res.render('listazas', { hirdetesek: adv[0] });
+});
 
 function validateDate(date1, date2) {
     if (date1.getMonth() === date2.getMonth() && date1.getDate() === date2.getDate()) {
@@ -61,7 +60,6 @@ function validateNew(cim, telepules, felszin, ar, szobak) {
 app.post('/submitNew', (req, res) => {
     res.set('Content-Type', 'text/plain; charset=utf-8');
 
-    const advID = hirdetesek.length + 1;
     const cim = req.fields.Cim;
     const telepules = req.fields.Telepules;
     const felszin = req.fields.Felszinterulet;
@@ -73,11 +71,12 @@ app.post('/submitNew', (req, res) => {
         res.statusCode = 400;
         res.end('Hibás adatokat adtál meg!');
     } else {
-        const hirdetes = [advID, cim, telepules, felszin, ar, szobak, datum];
-        hirdetesek.push(hirdetes);
-
-        res.end(`Your announcement ID is: ${advID}`);
+        insertAdvertisment(cim, telepules, felszin, ar, szobak, datum).catch((error) => {
+            console.error(`MySQL insertion error: ${error}`);
+        });
     }
+
+    res.redirect('/');
 });
 
 app.post('/submitPhoto', (req, res) => {
@@ -93,7 +92,7 @@ app.post('/submitPhoto', (req, res) => {
         const newPhoto = [photoID, fileHandler];
         photos.push(newPhoto);
 
-        fs.copyFile(fileHandler.path, path.join(process.cwd(), 'uploaded', fileHandler.name), (err) => {
+        fs.copyFile(fileHandler.path, path.join(process.cwd(), 'static', 'uploaded', fileHandler.name), (err) => {
             if (err) {
                 console.log('Error Found:', err);
             }
@@ -103,29 +102,22 @@ app.post('/submitPhoto', (req, res) => {
     }
 });
 
-app.post('/search', (req, res) => {
+app.listen(8080, () => { console.log('Server listening on http://localhost:8080/ ...'); });
+
+app.set('view engine', 'ejs');
+app.post('/search', async (req, res) => {
     res.set('Content-Type', 'text/plain; charset=utf-8');
     const telepules = req.fields.Telepules;
     const minAr = req.fields.MinAr;
     const maxAr = req.fields.MaxAr;
 
-    let found = 'These advertisments fit your criteria:\n';
-    let atLeastOne = false;
-    hirdetesek.forEach((adv) => {
-        if (adv[4] >= minAr && adv[4] <= maxAr && adv[2] === telepules) {
-            if (!atLeastOne) {
-                atLeastOne = true;
-            }
-            found += `ID: ${adv[0]}, Address: ${adv[1]}, Location: ${adv[2]}, Surface area: ${adv[3]}, Price: ${adv[4]}, Number of rooms: ${adv[5]}, Date published: ${adv[6]}\n`;
-        }
-    });
-
-    if (atLeastOne) {
-        res.end(found);
-    } else {
-        res.statusCode = 400;
-        res.end('No advertisments fit your criteria!');
+    try {
+        const adv = await getAdvertisments(true, telepules, minAr, maxAr);
+        res.type('.html');
+        res.render('listazas', { hirdetesek: adv[0] });
+    } catch (err) {
+        console.error(err);
+        res.status(500);
+        res.send(`Error: ${err}`);
     }
 });
-
-app.listen(8080, () => { console.log('Server listening on http://localhost:8080/ ...'); });

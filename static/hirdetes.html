@@ -9,6 +9,12 @@
     <!-- <script src='hirdetesValid.js'></script> -->
 </head>
 <body>
+    <nav>
+        <a href="hirdetes.html">Beszúrás</a>
+        <a href="/">Listázás</a>
+        <a href="kereses.html">Keresés</a>
+    </nav>
+
     <div id="forms">
         <form method="POST" action="/submitNew">
             <p>Lakáshírdetés feladása</p>
@@ -38,20 +44,6 @@
             <input type="file" name="Fenykep" id="feltoltesfoto" required>
 
             <input type="submit" value="Feltöltés!">
-        </form>
-
-        <br><br>
-
-        <form method="POST" action="/search">
-            <p>Lakás keresése</p>
-            <label for="keresestelepules">Település</label>
-            <input type="text" name="Telepules" id="keresestelepules" required>
-            <label for="keresesmin">Min. Ár:</label>
-            <input type="number" name="MinAr" id="keresesmin" min="0" required>
-            <label for="keresesmax">Max. Ár:</label>
-            <input type="number" name="MaxAr" id="keresesmax" min="0" required>
-
-            <input type="submit" value="Keresés!">
         </form>
     </div>
 </body>

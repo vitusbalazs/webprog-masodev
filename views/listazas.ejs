@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset='utf-8'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <title>Page Title</title>
+    <meta name='viewport' content='width=device-width, initial-scale=1'>
+    <link rel='stylesheet' type='text/css' media='screen' href='main.css'>
+    <!-- <script src='hirdetesValid.js'></script> -->
+</head>
+<body>
+    <nav>
+        <a href="hirdetes.html">Beszúrás</a>
+        <a href="/">Listázás</a>
+        <a href="kereses.html">Keresés</a>
+    </nav>
+
+    <div id="forms">
+        <form method="POST" action="/search">
+            <p>Lakás keresése</p>
+            <label for="keresestelepules">Település</label>
+            <input type="text" name="Telepules" id="keresestelepules" required>
+            <label for="keresesmin">Min. Ár:</label>
+            <input type="number" name="MinAr" id="keresesmin" min="0" required>
+            <label for="keresesmax">Max. Ár:</label>
+            <input type="number" name="MaxAr" id="keresesmax" min="0" required>
+
+            <input type="submit" value="Keresés!">
+        </form>
+    </div>
+
+    <div id="lista">
+        <p>Hírdetések:</p>
+        <% hirdetesek.forEach((h) => { %>
+            <div class="list-item">
+                <h3>ID: <%= h.HID %></h3>
+                <ul>
+                    <li>Cím: <%= h.Cim %></li>
+                    <li>Telepules: <%= h.Telepules %></li>
+                    <li>Felszinterulet: <%= h.Felszinterulet %></li>
+                    <li>Ar: <%= h.Ar %></li>
+                    <li>Szobak Szama: <%= h.Szobak %></li>
+                    <li>Datum: <%= h.Datum %></li>
+                </ul>
+            </div>
+        <% }) %>
+    </div>
+</body>
+</html>
