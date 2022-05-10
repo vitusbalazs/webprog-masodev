@@ -4,7 +4,8 @@ import morgan from 'morgan';
 import eformidable from 'express-formidable';
 import fs from 'fs';
 import {
-    getAdvertisments, insertAdvertisment, getDetails, getPhotos, advertismentExists, insertPhoto,
+    getAdvertisments, insertAdvertisment, getDetails, getPhotos,
+    insertPhoto, getUsers, insertUser,
 } from './db.js';
 
 // a mappa ahonnan statikus tartalmat szolgálunk
@@ -15,13 +16,12 @@ const app = express();
 
 // morgan middleware: loggolja a beérkezett hívásokat
 app.use(morgan('tiny'));
-// express static middleware: statikus állományokat szolgál fel
-app.use(express.static(staticDir));
 
 // FORM VALIDATION
 
 // formidable-lel dolgozzuk fel a kéréseket
 app.use(eformidable({ staticDir }));
+app.set('view engine', 'ejs');
 
 function validateDate(date1, date2) {
     if (date1.getMonth() === date2.getMonth() && date1.getDate() === date2.getDate()) {
@@ -60,12 +60,13 @@ app.post('/submitNew', (req, res) => {
     const ar = req.fields.Ar;
     const szobak = req.fields.SzobakSzama;
     const datum = new Date(req.fields.Datum);
+    const user = req.fields.Felhasznalo;
 
     if (!validateNew(cim, telepules, felszin, ar, szobak) || !validateDate(datum, new Date())) {
         res.statusCode = 400;
         res.end('Hibás adatokat adtál meg!');
     } else {
-        insertAdvertisment(cim, telepules, felszin, ar, szobak, datum).catch((error) => {
+        insertAdvertisment(cim, telepules, felszin, ar, szobak, datum, user).catch((error) => {
             console.error(`MySQL insertion error: ${error}`);
         });
     }
@@ -73,41 +74,47 @@ app.post('/submitNew', (req, res) => {
     res.redirect('/');
 });
 
-app.post('/submitPhoto', async (req, res) => {
-    res.set('Content-Type', 'text/plain;charset=utf-8');
+// app.post('/submitPhoto', async (req, res) => {
+//     res.set('Content-Type', 'text/plain;charset=utf-8');
 
-    const fileHandler = req.files.Fenykep;
-    const photoID = req.fields.FenykepID;
+//     const fileHandler = req.files.Fenykep;
+//     const photoID = req.fields.FenykepID;
 
-    const adv = await advertismentExists(photoID);
+//     const adv = await advertismentExists(photoID);
 
-    if (!adv) { // ellenorzest atirni
-        res.statusCode = 400;
-        res.end(`No advertisment with this ID: ${photoID}`);
-    } else {
-        const newFileName = path.join(process.cwd(), 'static', 'uploaded', fileHandler.name);
-        fs.copyFile(fileHandler.path, newFileName, (err) => {
-            if (err) {
-                console.log('Error Found:', err);
-            }
-        });
+//     if (!adv) { // ellenorzest atirni
+//         res.statusCode = 400;
+//         res.end(`No advertisment with this ID: ${photoID}`);
+//     } else {
+//         const newFileName = path.join(process.cwd(), 'static', 'uploaded', fileHandler.name);
+//         fs.copyFile(fileHandler.path, newFileName, (err) => {
+//             if (err) {
+//                 console.log('Error Found:', err);
+//             }
+//         });
 
-        // const newFileName2 = path.join('static', 'uploaded', fileHandler.name);
-        const newFileName2 = `../uploaded/${fileHandler.name}`;
+//         const newFileName2 = `../uploaded/${fileHandler.name}`;
 
-        insertPhoto(photoID, newFileName2).catch((error) => {
-            console.error(`MySQL insertion error: ${error}`);
-        });
+//         insertPhoto(photoID, newFileName2).catch((error) => {
+//             console.error(`MySQL insertion error: ${error}`);
+//         });
 
-        res.redirect(`/ad/${photoID}`);
-    }
+//         res.redirect(`/ad/${photoID}`);
+//     }
+// });
+
+app.post('/newUser', async (req, res) => {
+    const username = req.fields.Username;
+    const password = req.fields.UserPassword;
+
+    await insertUser(username, password);
+
+    res.redirect('/');
 });
 
 app.listen(8080, () => { console.log('Server listening on http://localhost:8080/ ...'); });
 
-app.set('view engine', 'ejs');
 app.post('/search', async (req, res) => {
-    res.set('Content-Type', 'text/plain; charset=utf-8');
     const telepules = req.fields.Telepules;
     const minAr = req.fields.MinAr;
     const maxAr = req.fields.MaxAr;
@@ -123,14 +130,14 @@ app.post('/search', async (req, res) => {
     }
 });
 
-app.get('/', async (req, res) => {
-    const adv = await getAdvertisments(false);
-    res.type('.html');
-    res.render('listazas', { hirdetesek: adv[0] });
+app.get('/ad/hirdetes.html', async (req, res) => {
+    res.redirect('/hirdetes.html');
 });
 
-app.get('/ad/hirdetes.html', (req, res) => {
-    res.redirect('/hirdetes.html');
+app.get('/hirdetes.html', async (req, res) => {
+    const users = await getUsers();
+    res.type('.html');
+    res.render('hirdetes', { felhasznalok: users[0] });
 });
 
 app.get('/ad/main.css', (req, res) => {
@@ -145,3 +152,32 @@ app.get('/ad/:adID', async (req, res) => {
     res.type('.html');
     res.render('reszletek', { hirdetesek: adv[0], fotok: adv2[0] });
 });
+
+app.post('/submitPhoto/:advID', async (req, res) => {
+    const fileHandler = req.files.Fenykep;
+    const photoID = req.params.advID;
+
+    const newFileName = path.join(process.cwd(), 'static', 'uploaded', fileHandler.name);
+    fs.copyFile(fileHandler.path, newFileName, (err) => {
+        if (err) {
+            console.log('Error Found:', err);
+        }
+    });
+
+    const newFileName2 = `../uploaded/${fileHandler.name}`;
+
+    insertPhoto(photoID, newFileName2).catch((error) => {
+        console.error(`MySQL insertion error: ${error}`);
+    });
+
+    res.redirect(`/ad/${photoID}`);
+});
+
+app.get('/', async (req, res) => {
+    const adv = await getAdvertisments(false);
+    res.type('.html');
+    res.render('listazas', { hirdetesek: adv[0] });
+});
+
+// express static middleware: statikus állományokat szolgál fel
+app.use(express.static(staticDir));

@@ -10,9 +10,9 @@
 </head>
 <body>
     <nav>
-        <a href="hirdetes.html">Beszúrás</a>
+        <a href="/hirdetes.html">Beszúrás</a>
         <a href="/">Listázás</a>
-        <a href="kereses.html">Keresés</a>
+        <a href="/felhasznalo.html">Regisztráció</a>
     </nav>
 
     <% hirdetesek.forEach((h) => { %>
@@ -32,6 +32,15 @@
             <img alt="<%= f.KID %>" src=<%= f.KepPath %>>
         <% }) %>
     </div>
+
+    <% hirdetesek.forEach((h) => { %>
+        <form method="POST" action="/submitPhoto/<%= h.HID %>" enctype="multipart/form-data">
+            <p>Kép feltöltése hírdetéshez</p>
+            <label for="feltoltesfoto">Fénykép:</label>
+            <input type="file" name="Fenykep" id="feltoltesfoto" required>
     
+            <input type="submit" value="Feltöltés!">
+        </form>
+    <% }) %>
 </body>
 </html>

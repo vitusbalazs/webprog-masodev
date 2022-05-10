@@ -14,7 +14,7 @@ export default function getConnection() {
 }
 
 export function createTable1() {
-    return connectionPool.query('CREATE TABLE IF NOT EXISTS hirdetes (HID INT AUTO_INCREMENT, Cim VARCHAR(50), Telepules VARCHAR(50), Felszinterulet INT, Ar INT, Szobak INT, Datum DATE, PRIMARY KEY (HID));');
+    return connectionPool.query('CREATE TABLE IF NOT EXISTS hirdetes (HID INT AUTO_INCREMENT, Cim VARCHAR(50), Telepules VARCHAR(50), Felszinterulet INT, Ar INT, Szobak INT, Datum DATE, FID INT, PRIMARY KEY (HID), FOREIGN KEY (FID) REFERENCES felhasznalo(FID));');
 }
 
 export function createTable2() {
@@ -25,8 +25,8 @@ export function createTable3() {
     return connectionPool.query('CREATE TABLE IF NOT EXISTS fenykep (KID INT AUTO_INCREMENT, HID INT, KepPath VARCHAR(300), PRIMARY KEY (KID), FOREIGN KEY (HID) REFERENCES hirdetes(HID));');
 }
 
-export function insertAdvertisment(cim, telepules, felszin, ar, szobak, datum) {
-    return connectionPool.query('INSERT INTO hirdetes VALUES (default, ?, ?, ?, ?, ?, ?)', [cim, telepules, felszin, ar, szobak, datum]);
+export function insertAdvertisment(cim, telepules, felszin, ar, szobak, datum, user) {
+    return connectionPool.query('INSERT INTO hirdetes VALUES (default, ?, ?, ?, ?, ?, ?, ?)', [cim, telepules, felszin, ar, szobak, datum, user]);
 }
 
 export function insertUser(nev, jelszo) {
@@ -44,7 +44,7 @@ export function getAdvertisments(filter, telepules, minAr, maxAr) {
     return connectionPool.query('SELECT * FROM hirdetes');
 }
 
-export function getUser() {
+export function getUsers() {
     return connectionPool.query('SELECT * FROM felhasznalo');
 }
 
@@ -64,8 +64,8 @@ export async function advertismentExists(advID) {
     return true;
 }
 
-createTable1()
-    .then(createTable2)
+createTable2()
+    .then(createTable1)
     .then(createTable3)
     .catch((err) => {
         console.error(err);

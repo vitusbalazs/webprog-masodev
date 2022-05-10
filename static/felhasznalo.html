@@ -16,16 +16,14 @@
     </nav>
 
     <div id="forms">
-        <form method="POST" action="/search">
-            <p>Lakás keresése</p>
-            <label for="keresestelepules">Település</label>
-            <input type="text" name="Telepules" id="keresestelepules" required>
-            <label for="keresesmin">Min. Ár:</label>
-            <input type="number" name="MinAr" id="keresesmin" min="0" required>
-            <label for="keresesmax">Max. Ár:</label>
-            <input type="number" name="MaxAr" id="keresesmax" min="0" required>
+        <form method="POST" action="/newUser">
+            <p>Felhasználó regisztrálása</p>
+            <label for="keresestelepules">Felhasználónév</label>
+            <input type="text" name="Username" id="keresestelepules" required>
+            <label for="keresesmin">Jelszó</label>
+            <input type="password" name="UserPassword" id="keresesmin" min="0" required>
 
-            <input type="submit" value="Keresés!">
+            <input type="submit" value="Regisztráció!">
         </form>
     </div>
 </body>
