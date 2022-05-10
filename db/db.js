@@ -61,7 +61,7 @@ export function getPhotos(advID) {
 }
 
 export function getDetails(advID) {
-    return connectionPool.query('SELECT * FROM hirdetes WHERE HID=?', [advID]);
+    return connectionPool.query('SELECT h.*, f.Nev FROM hirdetes AS h JOIN felhasznalo AS f ON h.FID = f.FID WHERE HID=?', [advID]);
 }
 
 createTable2()
