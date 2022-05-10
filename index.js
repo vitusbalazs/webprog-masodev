@@ -51,7 +51,14 @@ function validateNew(cim, telepules, felszin, ar, szobak) {
     return true;
 }
 
-app.post('/submitNew', (req, res) => {
+function validateLength(cim, telepules) { // complexity miatt
+    if (cim.length < 3 || telepules.length < 3) {
+        return false;
+    }
+    return true;
+}
+
+app.post('/submitNew', async (req, res) => {
     res.set('Content-Type', 'text/plain; charset=utf-8');
 
     const cim = req.fields.Cim;
@@ -63,45 +70,30 @@ app.post('/submitNew', (req, res) => {
     const user = req.fields.Felhasznalo;
 
     if (!validateNew(cim, telepules, felszin, ar, szobak) || !validateDate(datum, new Date())) {
-        res.statusCode = 400;
-        res.end('Hibás adatokat adtál meg!');
+        let errorString = 'A következő hibák léptek fel: ';
+        if (!validateLength(cim, telepules)) {
+            errorString += 'A cím vagy a település túl rövid, ';
+        }
+        if (felszin <= 0 || ar <= 0 || szobak <= 0) {
+            errorString += 'A felszin, az ar es a szobak szama nem lehet 0 vagy kisebb, ';
+        }
+        if (!validateDate(datum, new Date())) {
+            errorString += 'A dátum a mai dátum kell legyen!';
+        }
+
+        console.log(errorString);
+
+        // res.redirect('/hirdetes.html');
+        const users = await getUsers();
+        res.type('.html');
+        res.render('hirdetes', { felhasznalok: users[0], errors: errorString });
     } else {
         insertAdvertisment(cim, telepules, felszin, ar, szobak, datum, user).catch((error) => {
             console.error(`MySQL insertion error: ${error}`);
         });
+        res.redirect('/');
     }
-
-    res.redirect('/');
 });
-
-// app.post('/submitPhoto', async (req, res) => {
-//     res.set('Content-Type', 'text/plain;charset=utf-8');
-
-//     const fileHandler = req.files.Fenykep;
-//     const photoID = req.fields.FenykepID;
-
-//     const adv = await advertismentExists(photoID);
-
-//     if (!adv) { // ellenorzest atirni
-//         res.statusCode = 400;
-//         res.end(`No advertisment with this ID: ${photoID}`);
-//     } else {
-//         const newFileName = path.join(process.cwd(), 'static', 'uploaded', fileHandler.name);
-//         fs.copyFile(fileHandler.path, newFileName, (err) => {
-//             if (err) {
-//                 console.log('Error Found:', err);
-//             }
-//         });
-
-//         const newFileName2 = `../uploaded/${fileHandler.name}`;
-
-//         insertPhoto(photoID, newFileName2).catch((error) => {
-//             console.error(`MySQL insertion error: ${error}`);
-//         });
-
-//         res.redirect(`/ad/${photoID}`);
-//     }
-// });
 
 app.post('/newUser', async (req, res) => {
     const username = req.fields.Username;
@@ -137,7 +129,7 @@ app.get('/ad/hirdetes.html', async (req, res) => {
 app.get('/hirdetes.html', async (req, res) => {
     const users = await getUsers();
     res.type('.html');
-    res.render('hirdetes', { felhasznalok: users[0] });
+    res.render('hirdetes', { felhasznalok: users[0], errors: '' });
 });
 
 app.get('/ad/main.css', (req, res) => {
