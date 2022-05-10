@@ -36,12 +36,14 @@
                 <h3>ID: <%= h.HID %></h3>
                 <ul>
                     <li>Cím: <%= h.Cim %></li>
-                    <li>Telepules: <%= h.Telepules %></li>
+                    <!-- <li>Telepules: <%= h.Telepules %></li>
                     <li>Felszinterulet: <%= h.Felszinterulet %></li>
                     <li>Ar: <%= h.Ar %></li>
-                    <li>Szobak Szama: <%= h.Szobak %></li>
+                    <li>Szobak Szama: <%= h.Szobak %></li> -->
                     <li>Datum: <%= h.Datum %></li>
                 </ul>
+                <!-- <button class="details" onclick="getDetails(this.id);" id=<%= h.HID %>>Részletek</button> -->
+                <a href="/ad/<%= h.HID %>"><button class="details">Részletek</button></a>
             </div>
         <% }) %>
     </div>

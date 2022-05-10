@@ -22,7 +22,7 @@ export function createTable2() {
 }
 
 export function createTable3() {
-    return connectionPool.query('CREATE TABLE IF NOT EXISTS fenykep (KID INT AUTO_INCREMENT, HID INT, KepPath VARCHAR(100), PRIMARY KEY (KID), FOREIGN KEY (HID) REFERENCES hirdetes(HID));');
+    return connectionPool.query('CREATE TABLE IF NOT EXISTS fenykep (KID INT AUTO_INCREMENT, HID INT, KepPath VARCHAR(300), PRIMARY KEY (KID), FOREIGN KEY (HID) REFERENCES hirdetes(HID));');
 }
 
 export function insertAdvertisment(cim, telepules, felszin, ar, szobak, datum) {
@@ -33,8 +33,8 @@ export function insertUser(nev, jelszo) {
     return connectionPool.query('INSERT INTO felhasznalo VALUES (default, ?, ?)', [nev, jelszo]);
 }
 
-export function insertPhoto(advertisment) {
-    return connectionPool.query('INSERT INTO fenykep VALUES (default, ?, ?)', [advertisment.advid, advertisment.path]);
+export function insertPhoto(advID, photoPath) {
+    return connectionPool.query('INSERT INTO fenykep VALUES (default, ?, ?)', [advID, photoPath]);
 }
 
 export function getAdvertisments(filter, telepules, minAr, maxAr) {
@@ -48,8 +48,20 @@ export function getUser() {
     return connectionPool.query('SELECT * FROM felhasznalo');
 }
 
-export function getPhotos() {
-    return connectionPool.query('SELECT * FROM fenykep');
+export function getPhotos(advID) {
+    return connectionPool.query('SELECT * FROM fenykep WHERE HID=?', [advID]);
+}
+
+export function getDetails(advID) {
+    return connectionPool.query('SELECT * FROM hirdetes WHERE HID=?', [advID]);
+}
+
+export async function advertismentExists(advID) {
+    const a = await getDetails(advID);
+    if (a[0].length <= 0) {
+        return false;
+    }
+    return true;
 }
 
 createTable1()

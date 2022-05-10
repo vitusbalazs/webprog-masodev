@@ -3,7 +3,9 @@ import path from 'path';
 import morgan from 'morgan';
 import eformidable from 'express-formidable';
 import fs from 'fs';
-import { getAdvertisments, insertAdvertisment, insertPhoto } from './db.js';
+import {
+    getAdvertisments, insertAdvertisment, getDetails, getPhotos, advertismentExists, insertPhoto,
+} from './db.js';
 
 // a mappa ahonnan statikus tartalmat szolgálunk
 const staticDir = path.join(process.cwd(), 'static');
@@ -17,17 +19,9 @@ app.use(morgan('tiny'));
 app.use(express.static(staticDir));
 
 // FORM VALIDATION
-const hirdetesek = [];
-const photos = [];
 
 // formidable-lel dolgozzuk fel a kéréseket
 app.use(eformidable({ staticDir }));
-
-app.get('/', async (req, res) => {
-    const adv = await getAdvertisments(false);
-    res.type('.html');
-    res.render('listazas', { hirdetesek: adv[0] });
-});
 
 function validateDate(date1, date2) {
     if (date1.getMonth() === date2.getMonth() && date1.getDate() === date2.getDate()) {
@@ -79,26 +73,33 @@ app.post('/submitNew', (req, res) => {
     res.redirect('/');
 });
 
-app.post('/submitPhoto', (req, res) => {
+app.post('/submitPhoto', async (req, res) => {
     res.set('Content-Type', 'text/plain;charset=utf-8');
 
     const fileHandler = req.files.Fenykep;
     const photoID = req.fields.FenykepID;
 
-    if (photoID > hirdetesek.length) {
+    const adv = await advertismentExists(photoID);
+
+    if (!adv) { // ellenorzest atirni
         res.statusCode = 400;
         res.end(`No advertisment with this ID: ${photoID}`);
     } else {
-        const newPhoto = [photoID, fileHandler];
-        photos.push(newPhoto);
-
-        fs.copyFile(fileHandler.path, path.join(process.cwd(), 'static', 'uploaded', fileHandler.name), (err) => {
+        const newFileName = path.join(process.cwd(), 'static', 'uploaded', fileHandler.name);
+        fs.copyFile(fileHandler.path, newFileName, (err) => {
             if (err) {
                 console.log('Error Found:', err);
             }
         });
 
-        res.end(`The photo has been uploaded successfully to Advertisment ID: ${photoID}`);
+        // const newFileName2 = path.join('static', 'uploaded', fileHandler.name);
+        const newFileName2 = `../uploaded/${fileHandler.name}`;
+
+        insertPhoto(photoID, newFileName2).catch((error) => {
+            console.error(`MySQL insertion error: ${error}`);
+        });
+
+        res.redirect(`/ad/${photoID}`);
     }
 });
 
@@ -120,4 +121,27 @@ app.post('/search', async (req, res) => {
         res.status(500);
         res.send(`Error: ${err}`);
     }
+});
+
+app.get('/', async (req, res) => {
+    const adv = await getAdvertisments(false);
+    res.type('.html');
+    res.render('listazas', { hirdetesek: adv[0] });
+});
+
+app.get('/ad/hirdetes.html', (req, res) => {
+    res.redirect('/hirdetes.html');
+});
+
+app.get('/ad/main.css', (req, res) => {
+    res.redirect('/main.css');
+});
+
+app.get('/ad/:adID', async (req, res) => {
+    const ad = req.params.adID;
+    const adv = await getDetails(ad);
+    const adv2 = await getPhotos(ad);
+
+    res.type('.html');
+    res.render('reszletek', { hirdetesek: adv[0], fotok: adv2[0] });
 });
