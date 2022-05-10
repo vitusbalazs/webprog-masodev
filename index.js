@@ -5,8 +5,8 @@ import eformidable from 'express-formidable';
 import fs from 'fs';
 import {
     getAdvertisments, insertAdvertisment, getDetails, getPhotos,
-    insertPhoto, getUsers, insertUser,
-} from './db.js';
+    insertPhoto, getUsers, insertUser, userExists,
+} from './db/db.js';
 
 // a mappa ahonnan statikus tartalmat szolgálunk
 const staticDir = path.join(process.cwd(), 'static');
@@ -16,8 +16,6 @@ const app = express();
 
 // morgan middleware: loggolja a beérkezett hívásokat
 app.use(morgan('tiny'));
-
-// FORM VALIDATION
 
 // formidable-lel dolgozzuk fel a kéréseket
 app.use(eformidable({ staticDir }));
@@ -99,9 +97,13 @@ app.post('/newUser', async (req, res) => {
     const username = req.fields.Username;
     const password = req.fields.UserPassword;
 
-    await insertUser(username, password);
-
-    res.redirect('/');
+    if (await userExists(username)) {
+        res.type('.html');
+        res.render('regisztracio', { error: 'Már létezik felhasználó ezzel a névvel!' });
+    } else {
+        await insertUser(username, password);
+        res.redirect('/');
+    }
 });
 
 app.listen(8080, () => { console.log('Server listening on http://localhost:8080/ ...'); });
@@ -122,11 +124,11 @@ app.post('/search', async (req, res) => {
     }
 });
 
-app.get('/ad/hirdetes.html', async (req, res) => {
-    res.redirect('/hirdetes.html');
-});
+// app.get('/ad/hirdetes.html', async (req, res) => {
+//     res.redirect('/hirdetes.html');
+// });
 
-app.get('/hirdetes.html', async (req, res) => {
+app.get(['/hirdetes.html', '/ad/hirdetes.html'], async (req, res) => {
     const users = await getUsers();
     res.type('.html');
     res.render('hirdetes', { felhasznalok: users[0], errors: '' });
@@ -156,7 +158,8 @@ app.post('/submitPhoto/:advID', async (req, res) => {
         }
     });
 
-    const newFileName2 = `../uploaded/${fileHandler.name}`;
+    // const newFileName2 = `../uploaded/${fileHandler.name}`;
+    const newFileName2 = path.join('..', 'uploaded', fileHandler.name);
 
     insertPhoto(photoID, newFileName2).catch((error) => {
         console.error(`MySQL insertion error: ${error}`);

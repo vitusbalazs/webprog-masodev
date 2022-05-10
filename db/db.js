@@ -48,20 +48,20 @@ export function getUsers() {
     return connectionPool.query('SELECT * FROM felhasznalo');
 }
 
+export async function userExists(username) {
+    const a = await connectionPool.query('SELECT * FROM felhasznalo WHERE Nev=?', [username]);
+    if (a[0].length > 0) {
+        return true;
+    }
+    return false;
+}
+
 export function getPhotos(advID) {
     return connectionPool.query('SELECT * FROM fenykep WHERE HID=?', [advID]);
 }
 
 export function getDetails(advID) {
     return connectionPool.query('SELECT * FROM hirdetes WHERE HID=?', [advID]);
-}
-
-export async function advertismentExists(advID) {
-    const a = await getDetails(advID);
-    if (a[0].length <= 0) {
-        return false;
-    }
-    return true;
 }
 
 createTable2()
