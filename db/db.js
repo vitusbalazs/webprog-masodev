@@ -26,20 +26,20 @@ export function createTable3() {
 }
 
 export function insertAdvertisment(cim, telepules, felszin, ar, szobak, datum, user) {
-    return connectionPool.execute('INSERT INTO hirdetes VALUES (default, ?, ?, ?, ?, ?, ?, ?)', [cim, telepules, felszin, ar, szobak, datum, user]);
+    return connectionPool.query('INSERT INTO hirdetes VALUES (default, ?, ?, ?, ?, ?, ?, ?)', [cim, telepules, felszin, ar, szobak, datum, user]);
 }
 
 export function insertUser(nev, jelszo) {
-    return connectionPool.execute('INSERT INTO felhasznalo VALUES (default, ?, ?)', [nev, jelszo]);
+    return connectionPool.query('INSERT INTO felhasznalo VALUES (default, ?, ?)', [nev, jelszo]);
 }
 
 export function insertPhoto(advID, photoPath) {
-    return connectionPool.execute('INSERT INTO fenykep VALUES (default, ?, ?)', [advID, photoPath]);
+    return connectionPool.query('INSERT INTO fenykep VALUES (default, ?, ?)', [advID, photoPath]);
 }
 
 export function getAdvertisments(filter, telepules, minAr, maxAr) {
     if (filter) {
-        return connectionPool.execute('SELECT * FROM hirdetes WHERE Telepules=? AND Ar>=? AND Ar<=?', [telepules, minAr, maxAr]);
+        return connectionPool.query('SELECT * FROM hirdetes WHERE Telepules=? AND Ar>=? AND Ar<=?', [telepules, minAr, maxAr]);
     }
     return connectionPool.query('SELECT * FROM hirdetes');
 }
@@ -49,7 +49,7 @@ export function getUsers() {
 }
 
 export async function userExists(username) {
-    const a = await connectionPool.execute('SELECT * FROM felhasznalo WHERE Nev=?', [username]);
+    const a = await connectionPool.query('SELECT * FROM felhasznalo WHERE Nev=?', [username]);
     if (a[0].length > 0) {
         return true;
     }
@@ -57,11 +57,11 @@ export async function userExists(username) {
 }
 
 export function getPhotos(advID) {
-    return connectionPool.execute('SELECT * FROM fenykep WHERE HID=?', [advID]);
+    return connectionPool.query('SELECT * FROM fenykep WHERE HID=?', [advID]);
 }
 
 export function getDetails(advID) {
-    return connectionPool.execute('SELECT h.*, f.Nev FROM hirdetes AS h JOIN felhasznalo AS f ON h.FID = f.FID WHERE HID=?', [advID]);
+    return connectionPool.query('SELECT h.*, f.Nev FROM hirdetes AS h JOIN felhasznalo AS f ON h.FID = f.FID WHERE HID=?', [advID]);
 }
 
 createTable2()
@@ -71,5 +71,5 @@ createTable2()
         console.error(err);
     })
     .then((result) => {
-        console.log('Databases ready!');
+        console.log(`Databases ready: ${result}`);
     });

@@ -134,6 +134,10 @@ app.get(['/hirdetes.html', '/ad/hirdetes.html'], async (req, res) => {
     res.render('hirdetes', { felhasznalok: users[0], errors: '' });
 });
 
+app.get('/ad/main.css', (req, res) => {
+    res.redirect('/main.css');
+});
+
 app.get('/ad/:adID', async (req, res) => {
     const ad = req.params.adID;
     const adv = await getDetails(ad);
