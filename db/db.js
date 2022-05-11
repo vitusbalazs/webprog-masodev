@@ -70,6 +70,6 @@ createTable2()
     .catch((err) => {
         console.error(err);
     })
-    .then(() => {
-        console.log('Database ready');
+    .then((result) => {
+        console.log(`Databases ready: ${result}`);
     });
