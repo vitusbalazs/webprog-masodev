@@ -5,23 +5,23 @@
     <meta http-equiv='X-UA-Compatible' content='IE=edge'>
     <title>Page Title</title>
     <meta name='viewport' content='width=device-width, initial-scale=1'>
-    <link rel='stylesheet' type='text/css' media='screen' href='main.css'>
+    <link rel='stylesheet' type='text/css' media='screen' href='/main.css'>
     <!-- <script src='hirdetesValid.js'></script> -->
 </head>
 <body>
     <nav>
-        <a href="/hirdetes.html">Beszúrás</a>
+        <a href="/hirdetesek">Beszúrás</a>
         <a href="/">Listázás</a>
-        <a href="/felhasznalo.html">Regisztráció</a>
+        <a href="/felhasznalo">Regisztráció</a>
     </nav>
 
     <div id="forms">
-        <form method="POST" action="/newUser">
+        <form method="POST" action="/felhasznalo/newUser">
             <p>Felhasználó regisztrálása</p>
-            <label for="keresestelepules">Felhasználónév</label>
-            <input type="text" name="Username" id="keresestelepules" required>
-            <label for="keresesmin">Jelszó</label>
-            <input type="password" name="UserPassword" id="keresesmin" min="0" required>
+            <label for="Username">Felhasználónév</label>
+            <input type="text" name="Username" id="Username" required>
+            <label for="UserPassword">Jelszó</label>
+            <input type="password" name="UserPassword" id="UserPassword" min="0" required>
 
             <input type="submit" value="Regisztráció!">
         </form>

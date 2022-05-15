@@ -5,14 +5,14 @@
     <meta http-equiv='X-UA-Compatible' content='IE=edge'>
     <title>Page Title</title>
     <meta name='viewport' content='width=device-width, initial-scale=1'>
-    <link rel='stylesheet' type='text/css' media='screen' href='main.css'>
+    <link rel='stylesheet' type='text/css' media='screen' href='/main.css'>
     <!-- <script src='hirdetesValid.js'></script> -->
 </head>
 <body>
     <nav>
-        <a href="/hirdetes.html">Beszúrás</a>
+        <a href="/hirdetesek">Beszúrás</a>
         <a href="/">Listázás</a>
-        <a href="/felhasznalo.html">Regisztráció</a>
+        <a href="/felhasznalo">Regisztráció</a>
     </nav>
 
     <% hirdetesek.forEach((h) => { %>
@@ -35,7 +35,7 @@
     </div>
 
     <% hirdetesek.forEach((h) => { %>
-        <form method="POST" action="/submitPhoto/<%= h.HID %>" enctype="multipart/form-data">
+        <form method="POST" action="/ad/submitPhoto/<%= h.HID %>" enctype="multipart/form-data">
             <p>Kép feltöltése hírdetéshez</p>
             <label for="feltoltesfoto">Fénykép:</label>
             <input type="file" name="Fenykep" id="feltoltesfoto" required>
@@ -43,5 +43,7 @@
             <input type="submit" value="Feltöltés!">
         </form>
     <% }) %>
+
+    <p><%= errorMsg %></p>
 </body>
 </html>
