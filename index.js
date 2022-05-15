@@ -57,8 +57,6 @@ function validateLength(cim, telepules) { // complexity miatt
 }
 
 app.post('/submitNew', async (req, res) => {
-    res.set('Content-Type', 'text/plain; charset=utf-8');
-
     const cim = req.fields.Cim;
     const telepules = req.fields.Telepules;
     const felszin = req.fields.Felszinterulet;
@@ -79,15 +77,15 @@ app.post('/submitNew', async (req, res) => {
             errorString += 'A dátum a mai dátum kell legyen!';
         }
 
-        console.log(errorString);
-
-        // res.redirect('/hirdetes.html');
         const users = await getUsers();
+        console.log(users);
         res.type('.html');
-        res.render('hirdetes', { felhasznalok: users[0], errors: errorString });
+        res.render('hirdetes', { felhasznalok: users, errors: errorString });
     } else {
         insertAdvertisment(cim, telepules, felszin, ar, szobak, datum, user).catch((error) => {
             console.error(`MySQL insertion error: ${error}`);
+            res.type('.html');
+            res.render('mysql_error', { tableName: 'hirdetes', errMess: error });
         });
         res.redirect('/');
     }
@@ -101,12 +99,14 @@ app.post('/newUser', async (req, res) => {
         res.type('.html');
         res.render('regisztracio', { error: 'Már létezik felhasználó ezzel a névvel!' });
     } else {
-        await insertUser(username, password);
+        insertUser(username, password).catch((error) => {
+            console.error(`MySQL insertion error: ${error}`);
+            res.type('.html');
+            res.render('mysql_error', { tableName: 'hirdetes', errMess: error });
+        });
         res.redirect('/');
     }
 });
-
-app.listen(8080, () => { console.log('Server listening on http://localhost:8080/ ...'); });
 
 app.post('/search', async (req, res) => {
     const telepules = req.fields.Telepules;
@@ -116,22 +116,18 @@ app.post('/search', async (req, res) => {
     try {
         const adv = await getAdvertisments(true, telepules, minAr, maxAr);
         res.type('.html');
-        res.render('listazas', { hirdetesek: adv[0] });
+        res.render('listazas', { hirdetesek: adv, error: '' });
     } catch (err) {
         console.error(err);
-        res.status(500);
-        res.send(`Error: ${err}`);
+        res.type('.html');
+        res.render('listazas', { hirdetesek: [], error: 'Hiba történt az SQL lekérés és a listázás közben.' });
     }
 });
-
-// app.get('/ad/hirdetes.html', async (req, res) => {
-//     res.redirect('/hirdetes.html');
-// });
 
 app.get(['/hirdetes.html', '/ad/hirdetes.html'], async (req, res) => {
     const users = await getUsers();
     res.type('.html');
-    res.render('hirdetes', { felhasznalok: users[0], errors: '' });
+    res.render('hirdetes', { felhasznalok: users, errors: '' });
 });
 
 app.get('/ad/main.css', (req, res) => {
@@ -140,29 +136,30 @@ app.get('/ad/main.css', (req, res) => {
 
 app.get('/ad/:adID', async (req, res) => {
     const ad = req.params.adID;
-    const adv = await getDetails(ad);
-    const adv2 = await getPhotos(ad);
+    const advertisments = await getDetails(ad);
+    const photos = await getPhotos(ad);
 
     res.type('.html');
-    res.render('reszletek', { hirdetesek: adv[0], fotok: adv2[0] });
+    res.render('reszletek', { hirdetesek: advertisments, fotok: photos });
 });
 
 app.post('/submitPhoto/:advID', async (req, res) => {
     const fileHandler = req.files.Fenykep;
     const photoID = req.params.advID;
 
-    const newFileName = path.join(process.cwd(), 'static', 'uploaded', fileHandler.name);
-    fs.copyFile(fileHandler.path, newFileName, (err) => {
+    const absolutePathToUploadDirectory = path.join(process.cwd(), 'static', 'uploaded', fileHandler.name);
+    fs.copyFile(fileHandler.path, absolutePathToUploadDirectory, (err) => {
         if (err) {
             console.log('Error Found:', err);
         }
     });
 
-    // const newFileName2 = `../uploaded/${fileHandler.name}`;
-    const newFileName2 = path.join('..', 'uploaded', fileHandler.name);
+    const absolutePathToStoreFromRepoDir = path.join('/uploaded', fileHandler.name);
 
-    insertPhoto(photoID, newFileName2).catch((error) => {
+    insertPhoto(photoID, absolutePathToStoreFromRepoDir).catch((error) => {
         console.error(`MySQL insertion error: ${error}`);
+        res.type('.html');
+        res.render('mysql_error', { tableName: 'fenykep', errMess: error });
     });
 
     res.redirect(`/ad/${photoID}`);
@@ -171,8 +168,10 @@ app.post('/submitPhoto/:advID', async (req, res) => {
 app.get('/', async (req, res) => {
     const adv = await getAdvertisments(false);
     res.type('.html');
-    res.render('listazas', { hirdetesek: adv[0] });
+    res.render('listazas', { hirdetesek: adv });
 });
 
 // express static middleware: statikus állományokat szolgál fel
 app.use(express.static(staticDir));
+
+app.listen(8080, () => { console.log('Server listening on http://localhost:8080/ ...'); });
