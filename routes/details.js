@@ -1,7 +1,7 @@
 import { Router } from 'express';
 import path from 'path';
 import fs from 'fs';
-import { getPhotos, insertPhoto } from '../db/photosDB.js';
+import { deletePhoto, getPhotos, insertPhoto } from '../db/photosDB.js';
 import { getDetails } from '../db/advertismentsDB.js';
 
 const router = Router();
@@ -19,31 +19,42 @@ router.post('/submitPhoto/:advID', async (req, res) => {
     const fileHandler = req.files.Fenykep;
     const photoID = req.params.advID;
 
-    let errorWhileCopying = false;
-    const whereToStore = path.join(process.cwd(), 'static', 'uploaded', fileHandler.name);
-    fs.copyFile(fileHandler.path, whereToStore, (err) => {
-        if (err) {
-            console.log(err);
-            errorWhileCopying = true;
-        }
-    });
-    if (errorWhileCopying) {
-        const advertisments = await getDetails(photoID);
-        const photos = await getPhotos(photoID);
-        res.type('.html');
-        res.render('reszletek', { hirdetesek: advertisments, fotok: photos, errorMsg: 'Hiba történt a kép feltölést közben.' });
-        return;
-    }
+    const filename = fileHandler.path.split('\\').pop();
+    const filepath = path.join('/uploaded', filename);
 
-    const fromWhereToLoad = path.join('/uploaded', fileHandler.name);
-
-    await insertPhoto(photoID, fromWhereToLoad).catch((error) => {
+    await insertPhoto(photoID, filepath).catch((error) => {
         console.error(`MySQL insertion error: ${error}`);
         res.type('.html');
         res.render('mysql_error', { tableName: 'fenykep', errMess: error });
     });
 
     res.redirect(`/ad/${photoID}`);
+});
+
+router.post('/deletePhoto/:PID/:ADVID', async (req, res) => {
+    res.set('Content-Type', 'text/plain;charset=utf-8');
+    const KID = req.params.PID;
+    const HID = req.params.ADVID;
+
+    try {
+        await deletePhoto(KID);
+        const fotok = await getPhotos(HID);
+
+        let respBody = '';
+        fotok.forEach((f) => {
+            respBody += '<div class="fotok-item">';
+            respBody += `<img alt="${f.KID}" src="${f.KepPath}">`;
+            respBody += `<button id="${f.KID}" class="details" onclick="deletePhoto(this.id, ${f.HID});">Fénykép törlése</button>`;
+            respBody += '</div>';
+        });
+        respBody += '<h3>A fotó sikeresen törölve lett!</h3>';
+
+        res.end(respBody);
+    } catch (err) {
+        console.error(err);
+        const respBody = `<h3>Hiba történt az SQL kérés, vagy a válasz visszaküldése közben... ${err}</h3>`;
+        res.end(respBody);
+    }
 });
 
 export default router;

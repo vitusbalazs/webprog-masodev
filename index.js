@@ -10,6 +10,7 @@ import users from './routes/users.js';
 
 // a mappa ahonnan statikus tartalmat szolgálunk
 const staticDir = path.join(process.cwd(), 'static');
+const uploadDir = path.join(staticDir, 'uploaded');
 
 // inicializáljuk az express alkalmazást
 const app = express();
@@ -18,7 +19,7 @@ const app = express();
 app.use(morgan('tiny'));
 
 // formidable-lel dolgozzuk fel a kéréseket
-app.use(eformidable({ staticDir }));
+app.use(eformidable({ uploadDir, keepExtensions: true }));
 
 // view engine
 app.set('view engine', 'ejs');

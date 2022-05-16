@@ -6,7 +6,7 @@
     <title>Page Title</title>
     <meta name='viewport' content='width=device-width, initial-scale=1'>
     <link rel='stylesheet' type='text/css' media='screen' href='/main.css'>
-    <!-- <script src='hirdetesValid.js'></script> -->
+    <script src='/main.js'></script>
 </head>
 <body>
     <nav>
@@ -16,7 +16,7 @@
     </nav>
 
     <div id="forms">
-        <form method="POST" action="/search">
+        <form id="searchForm">
             <p>Lakás keresése</p>
             <label for="keresestelepules">Település</label>
             <input type="text" name="Telepules" id="keresestelepules" required>
@@ -32,13 +32,14 @@
     <div id="lista">
         <p>Hírdetések:</p>
         <% hirdetesek.forEach((h) => { %>
-            <div class="list-item">
+            <div class="list-item" id="<%= h.HID %>" onclick="showDetailsBelow(this.id);">
                 <h3>ID: <%= h.HID %></h3>
                 <ul>
                     <li>Cím: <%= h.Cim %></li>
                     <li>Datum: <%= h.Datum %></li>
                 </ul>
-                <a href="/ad/<%= h.HID %>"><button class="details">Részletek</button></a>
+                <p class="miniDetails" id="miniDetails<%= h.HID %>"></p>
+                <a href="/ad/<%= h.HID %>"><button class="details">Fényképek megtekintése</button></a>
             </div>
         <% }) %>
     </div>
