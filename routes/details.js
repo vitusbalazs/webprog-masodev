@@ -1,6 +1,5 @@
 import { Router } from 'express';
 import path from 'path';
-import fs from 'fs';
 import { deletePhoto, getPhotos, insertPhoto } from '../db/photosDB.js';
 import { getDetails } from '../db/advertismentsDB.js';
 
