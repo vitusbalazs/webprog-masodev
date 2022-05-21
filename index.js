@@ -2,15 +2,22 @@ import express from 'express';
 import path from 'path';
 import morgan from 'morgan';
 import eformidable from 'express-formidable';
+import { existsSync, mkdirSync } from 'fs';
 import { createTables } from './db/setupDB.js';
 import listazas from './routes/listazas.js';
 import details from './routes/details.js';
 import advertisments from './routes/advertisments.js';
 import users from './routes/users.js';
+import delPhoto from './api/photo.js';
+import miniDetails from './api/miniDetail.js';
 
 // a mappa ahonnan statikus tartalmat szolgálunk
 const staticDir = path.join(process.cwd(), 'static');
 const uploadDir = path.join(staticDir, 'uploaded');
+
+if (!existsSync(uploadDir)) {
+    mkdirSync(uploadDir);
+}
 
 // inicializáljuk az express alkalmazást
 const app = express();
@@ -31,6 +38,8 @@ createTables();
 app.use('/ad', details);
 app.use('/felhasznalo', users);
 app.use('/hirdetesek', advertisments);
+app.use('/deletePhoto', delPhoto);
+app.use('/showMiniDetails', miniDetails);
 app.use('/', listazas);
 
 // express static middleware: statikus állományokat szolgál fel

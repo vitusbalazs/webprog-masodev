@@ -15,18 +15,18 @@
         <a href="/felhasznalo">Regisztráció</a>
     </nav>
 
-    <% hirdetesek.forEach((h) => { %>
-        <h3>ID: <%= h.HID %></h3>
+    
+        <h3>ID: <%= hirdetesek.HID %></h3>
         <ul>
-            <li>Cím: <%= h.Cim %></li>
-            <li>Telepules: <%= h.Telepules %></li>
-            <li>Felszinterulet: <%= h.Felszinterulet %></li>
-            <li>Ar: <%= h.Ar %></li>
-            <li>Szobak Szama: <%= h.Szobak %></li>
-            <li>Datum: <%= h.Datum %></li>
-            <li>Feltöltötte: <%= h.Nev %></li>
+            <li>Cím: <%= hirdetesek.Cim %></li>
+            <li>Telepules: <%= hirdetesek.Telepules %></li>
+            <li>Felszinterulet: <%= hirdetesek.Felszinterulet %></li>
+            <li>Ar: <%= hirdetesek.Ar %></li>
+            <li>Szobak Szama: <%= hirdetesek.Szobak %></li>
+            <li>Datum: <%= hirdetesek.Datum %></li>
+            <li>Feltöltötte: <%= hirdetesek.Nev %></li>
         </ul>
-    <% }) %>
+    
 
     <div id="fotok">
         <% fotok.forEach((f) => { %>
@@ -37,15 +37,15 @@
         <% }) %>
     </div>
 
-    <% hirdetesek.forEach((h) => { %>
-        <form method="POST" action="/ad/submitPhoto/<%= h.HID %>" enctype="multipart/form-data">
+
+        <form method="POST" action="/ad/submitPhoto/<%= hirdetesek.HID %>" enctype="multipart/form-data">
             <p>Kép feltöltése hírdetéshez</p>
             <label for="feltoltesfoto">Fénykép:</label>
             <input type="file" name="Fenykep" id="feltoltesfoto" required>
     
             <input type="submit" value="Feltöltés!">
         </form>
-    <% }) %>
+
 
     <p><%= errorMsg %></p>
 </body>

@@ -33,7 +33,6 @@ form > p {
     border: 3px solid coral;
     margin: 10px;
     color: white;
-    /* width: 40rem; */
 }
 
 .details {
@@ -52,10 +51,6 @@ form > p {
     background-color: rgb(248, 112, 63);
     border-color: rgb(255, 157, 0);
 }
-
-/* body {
-    margin: 0px;
-} */
 
 nav {
     display: flex;

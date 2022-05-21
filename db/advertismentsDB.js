@@ -15,5 +15,5 @@ export async function getAdvertisments(filter, telepules, minAr, maxAr) {
 
 export async function getDetails(advID) {
     const [d] = await connectionPool.execute('SELECT h.*, f.Nev FROM hirdetes AS h JOIN felhasznalo AS f ON h.FID = f.FID WHERE HID=?', [advID]);
-    return d;
+    return d[0];
 }
