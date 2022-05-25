@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset='utf-8'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <title>Page Title</title>
+    <meta name='viewport' content='width=device-width, initial-scale=1'>
+    <link rel='stylesheet' type='text/css' media='screen' href='/main.css'>
+    <!-- <script src='hirdetesValid.js'></script> -->
+</head>
+<body>
+    <nav>
+        <a href="/hirdetesek">Beszúrás</a>
+        <a href="/">Listázás</a>
+        <a href="/felhasznalo">Regisztráció</a>
+    </nav>
+    
+    <h3>There was an error in your MySQL query.</h3>
+    <p>The error was encountered when accessing the following table: <%= tableName %></p>
+    <p>Error message: <%= errMess %></p>
+</body>
+</html>

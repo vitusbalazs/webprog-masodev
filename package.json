@@ -20,13 +20,14 @@
   "devDependencies": {
     "eslint": "^8.13.0",
     "eslint-config-airbnb-base": "^15.0.0",
-    "eslint-plugin-import": "^2.26.0"
+    "eslint-plugin-import": "^2.26.0",
+    "nodemon": "^2.0.16"
   },
   "dependencies": {
+    "ejs": "^3.1.7",
     "express": "^4.17.3",
     "express-formidable": "^1.2.0",
-    "fs": "^0.0.1-security",
     "morgan": "^1.10.0",
-    "path": "^0.12.7"
+    "mysql2": "^2.3.3"
   }
 }
