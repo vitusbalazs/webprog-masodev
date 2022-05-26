@@ -2,6 +2,7 @@ import { Router } from 'express';
 import path from 'path';
 import { getPhotos, insertPhoto } from '../db/photosDB.js';
 import { getDetails } from '../db/advertismentsDB.js';
+import { getCurrentUser } from '../auth/middleware.js';
 
 const router = Router();
 
@@ -10,8 +11,12 @@ router.get('/:adID', async (req, res) => {
     const advertisments = await getDetails(ad);
     const photos = await getPhotos(ad);
 
+    const currentUser = getCurrentUser(req);
+
     res.type('.html');
-    res.render('reszletek', { hirdetesek: advertisments, fotok: photos, errorMsg: '' });
+    res.render('reszletek', {
+        hirdetesek: advertisments, fotok: photos, errorMsg: '', username: currentUser,
+    });
 });
 
 router.post('/submitPhoto/:advID', async (req, res) => {

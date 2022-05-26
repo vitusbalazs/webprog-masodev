@@ -1,12 +1,19 @@
 import { Router } from 'express';
 import { getAdvertisments } from '../db/advertismentsDB.js';
+import { getCurrentUser } from '../auth/middleware.js';
 
 const router = Router();
 
 router.get('/', async (req, res) => {
-    const adv = await getAdvertisments(false);
-    res.type('.html');
-    res.render('listazas', { hirdetesek: adv });
+    const currentUser = getCurrentUser(req);
+    try {
+        const adv = await getAdvertisments(false);
+        res.type('.html');
+        res.render('listazas', { hirdetesek: adv, error: '', username: currentUser });
+    } catch (err) {
+        res.type('.html');
+        res.render('listazas', { hirdetesek: [], error: 'Hiba történt a listázás közben', username: currentUser });
+    }
 });
 
 router.post('/search', async (req, res) => {
@@ -14,14 +21,16 @@ router.post('/search', async (req, res) => {
     const minAr = req.fields.MinAr;
     const maxAr = req.fields.MaxAr;
 
+    const currentUser = getCurrentUser(req);
+
     try {
         const adv = await getAdvertisments(true, telepules, minAr, maxAr);
         res.type('.html');
-        res.render('listazas', { hirdetesek: adv, error: '' });
+        res.render('listazas', { hirdetesek: adv, error: '', username: currentUser });
     } catch (err) {
         console.error(err);
         res.type('.html');
-        res.render('listazas', { hirdetesek: [], error: 'Hiba történt az SQL lekérés és a listázás közben.' });
+        res.render('listazas', { hirdetesek: [], error: 'Hiba történt az SQL lekérés és a listázás közben.', username: currentUser });
     }
 });
 

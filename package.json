@@ -24,10 +24,15 @@
     "nodemon": "^2.0.16"
   },
   "dependencies": {
+    "bcrypt": "^5.0.1",
+    "cookie-parser": "^1.4.6",
+    "crypto": "^1.0.1",
     "ejs": "^3.1.7",
     "express": "^4.17.3",
     "express-formidable": "^1.2.0",
+    "jsonwebtoken": "^8.5.1",
     "morgan": "^1.10.0",
-    "mysql2": "^2.3.3"
+    "mysql2": "^2.3.3",
+    "util": "^0.12.4"
   }
 }

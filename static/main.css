@@ -59,6 +59,10 @@ nav {
     align-items: center;
 }
 
+nav > p {
+    float: right;
+}
+
 nav > a {
     color: white;
     text-decoration: none;

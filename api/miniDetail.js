@@ -14,9 +14,8 @@ router.get('/:hirdetesID', async (req, res) => {
         res.end(stringified);
     } catch (err) {
         console.error(err);
-        const respBody = `Hiba történt az SQL kérés, vagy a válasz visszaküldése közben... ${err}`;
         res.status(500);
-        res.end(respBody);
+        res.end(JSON.stringify({ err }));
     }
 });
 
