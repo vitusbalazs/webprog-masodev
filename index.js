@@ -3,6 +3,7 @@ import path from 'path';
 import morgan from 'morgan';
 import eformidable from 'express-formidable';
 import { existsSync, mkdirSync } from 'fs';
+import cookieParser from 'cookie-parser';
 import { createTables } from './db/setupDB.js';
 import listazas from './routes/listazas.js';
 import details from './routes/details.js';
@@ -27,6 +28,7 @@ app.use(morgan('tiny'));
 
 // formidable-lel dolgozzuk fel a kéréseket
 app.use(eformidable({ uploadDir, keepExtensions: true }));
+app.use(cookieParser());
 
 // view engine
 app.set('view engine', 'ejs');

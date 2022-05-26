@@ -14,10 +14,6 @@ export function deletePhoto(photoID) {
 }
 
 export async function getPhotoNameFromID(photoID) {
-    console.log('Szia1');
     const [p] = await connectionPool.execute('SELECT KepPath FROM fenykep WHERE KID=?', [photoID]);
-    console.log('Szia2');
-    console.log(p[0].KepPath);
-    console.log('Szia3');
     return p[0].KepPath;
 }

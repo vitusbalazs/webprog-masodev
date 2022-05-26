@@ -12,32 +12,39 @@
     <nav>
         <a href="/hirdetesek">Beszúrás</a>
         <a href="/">Listázás</a>
-        <a href="/felhasznalo">Regisztráció</a>
+        <a href="/felhasznalo">Bejelentkezés</a>
+        <a href="/felhasznalo/register">Regisztráció</a>
+
+        <a href="/felhasznalo/logout">Kijelentkezés</a>
+
+        <p>Currently logged in: <%= username %></p>
     </nav>
 
     
-        <h3>ID: <%= hirdetesek.HID %></h3>
-        <ul>
-            <li>Cím: <%= hirdetesek.Cim %></li>
-            <li>Telepules: <%= hirdetesek.Telepules %></li>
-            <li>Felszinterulet: <%= hirdetesek.Felszinterulet %></li>
-            <li>Ar: <%= hirdetesek.Ar %></li>
-            <li>Szobak Szama: <%= hirdetesek.Szobak %></li>
-            <li>Datum: <%= hirdetesek.Datum %></li>
-            <li>Feltöltötte: <%= hirdetesek.Nev %></li>
-        </ul>
+    <h3>ID: <%= hirdetesek.HID %></h3>
+    <ul>
+        <li>Cím: <%= hirdetesek.Cim %></li>
+        <li>Telepules: <%= hirdetesek.Telepules %></li>
+        <li>Felszinterulet: <%= hirdetesek.Felszinterulet %></li>
+        <li>Ar: <%= hirdetesek.Ar %></li>
+        <li>Szobak Szama: <%= hirdetesek.Szobak %></li>
+        <li>Datum: <%= hirdetesek.Datum %></li>
+        <li>Feltöltötte: <%= hirdetesek.Nev %></li>
+    </ul>
     
 
     <div id="fotok">
         <% fotok.forEach((f) => { %>
             <div class="fotok-item">
                 <img alt="<%= f.KID %>" src=<%= f.KepPath %>>
-                <button id="<%= f.KID %>" class="details" onclick="deletePhoto(this.id, <%= f.HID %>);">Fénykép törlése</button>
+                <% if (hirdetesek.Nev === username) { %>
+                    <button id="<%= f.KID %>" class="details" onclick="deletePhoto(this.id, <%= f.HID %>);">Fénykép törlése</button>
+                <% } %>
             </div>
         <% }) %>
     </div>
 
-
+    <% if (hirdetesek.Nev === username) { %>
         <form method="POST" action="/ad/submitPhoto/<%= hirdetesek.HID %>" enctype="multipart/form-data">
             <p>Kép feltöltése hírdetéshez</p>
             <label for="feltoltesfoto">Fénykép:</label>
@@ -45,7 +52,7 @@
     
             <input type="submit" value="Feltöltés!">
         </form>
-
+    <% } %>
 
     <p><%= errorMsg %></p>
 </body>

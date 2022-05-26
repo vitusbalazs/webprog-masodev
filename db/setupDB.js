@@ -16,7 +16,7 @@ export function createAdvertismentsTable() {
 }
 
 export function createUsersTable() {
-    return connectionPool.query('CREATE TABLE IF NOT EXISTS felhasznalo (FID INT AUTO_INCREMENT, Nev VARCHAR(50), Jelszo VARCHAR(50), PRIMARY KEY (FID));');
+    return connectionPool.query('CREATE TABLE IF NOT EXISTS felhasznalo (FID INT AUTO_INCREMENT, Nev VARCHAR(50), Jelszo VARCHAR(128), Szerep VARCHAR(30), PRIMARY KEY (FID));');
 }
 
 export function createPhotosTable() {

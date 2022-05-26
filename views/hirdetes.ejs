@@ -12,7 +12,12 @@
     <nav>
         <a href="/hirdetesek">Beszúrás</a>
         <a href="/">Listázás</a>
-        <a href="/felhasznalo">Regisztráció</a>
+        <a href="/felhasznalo">Bejelentkezés</a>
+        <a href="/felhasznalo/register">Regisztráció</a>
+
+        <a href="/felhasznalo/logout">Kijelentkezés</a>
+
+        <p>Currently logged in: <%= username %></p>
     </nav>
 
     <div id="forms">
@@ -21,9 +26,7 @@
             <label for="felhasznalo">Felhasználó:</label>
             <!-- <input type="text" name="Felhasznalo" id="lakasfelhasznalo" required> -->
             <select name="Felhasznalo" id="lakasfelhasznalo">
-                <% felhasznalok.forEach((f) => { %>
-                    <option value="<%= f.FID %>"><%= f.Nev %></option>
-                <% }) %>
+                <option value="<%= felhasznalo.FID %>"><%= felhasznalo.Nev %></option>
             </select>
             <label for="lakascim">Cím:</label>
             <input type="text" name="Cim" id="lakascim" required>

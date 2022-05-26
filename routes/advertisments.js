@@ -1,14 +1,18 @@
 import { Router } from 'express';
-import { getUsers } from '../db/usersDB.js';
+import { getUserByName } from '../db/usersDB.js';
 import { insertAdvertisment } from '../db/advertismentsDB.js';
 import { validateLength, validateNew } from './newRecordValidation.js';
+import { getCurrentUser, validateJWT } from '../auth/middleware.js';
 
 const router = Router();
 
+router.use('/', validateJWT);
+
 router.get('/', async (req, res) => {
-    const users = await getUsers();
+    const currentUser = getCurrentUser(req);
+    const users = await getUserByName(currentUser);
     res.type('.html');
-    res.render('hirdetes', { felhasznalok: users, errors: '' });
+    res.render('hirdetes', { felhasznalo: users, errors: '', username: currentUser });
 });
 
 router.post('/submitNew', async (req, res) => {
@@ -29,16 +33,18 @@ router.post('/submitNew', async (req, res) => {
             errorString += 'A felszin, az ar es a szobak szama nem lehet 0 vagy kisebb, ';
         }
 
-        const users = await getUsers();
+        const currentUser = getCurrentUser(req);
+        const users = await getUserByName(currentUser);
         res.type('.html');
-        res.render('hirdetes', { felhasznalok: users, errors: errorString });
+        res.render('hirdetes', { felhasznalo: users, errors: errorString, username: currentUser });
     } else {
-        await insertAdvertisment(cim, telepules, felszin, ar, szobak, datum, user)
-            .catch((error) => {
-                console.error(`MySQL insertion error: ${error}`);
-                res.type('.html');
-                res.render('mysql_error', { tableName: 'hirdetes', errMess: error });
-            });
+        try {
+            await insertAdvertisment(cim, telepules, felszin, ar, szobak, datum, user);
+        } catch (error) {
+            console.error(`MySQL insertion error: ${error}`);
+            res.type('.html');
+            res.render('mysql_error', { tableName: 'hirdetes', errMess: error });
+        }
         res.redirect('/');
     }
 });
