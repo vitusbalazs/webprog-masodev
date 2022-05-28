@@ -3,14 +3,15 @@ import path from 'path';
 import morgan from 'morgan';
 import eformidable from 'express-formidable';
 import { existsSync, mkdirSync } from 'fs';
-import cookieParser from 'cookie-parser';
+
+import userJS from './routes/user.js';
+import listJS from './routes/list.js';
+import advertismentJS from './routes/advertisments.js';
+
+// db (only temp, switching to mongoDB)
 import { createTables } from './db/setupDB.js';
-import listazas from './routes/listazas.js';
-import details from './routes/details.js';
-import advertisments from './routes/advertisments.js';
-import users from './routes/users.js';
-import delPhoto from './api/photo.js';
-import miniDetails from './api/miniDetail.js';
+
+// import cookieParser from 'cookie-parser';
 
 // a mappa ahonnan statikus tartalmat szolgálunk
 const staticDir = path.join(process.cwd(), 'static');
@@ -20,6 +21,8 @@ if (!existsSync(uploadDir)) {
     mkdirSync(uploadDir);
 }
 
+createTables();
+
 // inicializáljuk az express alkalmazást
 const app = express();
 
@@ -28,21 +31,17 @@ app.use(morgan('tiny'));
 
 // formidable-lel dolgozzuk fel a kéréseket
 app.use(eformidable({ uploadDir, keepExtensions: true }));
-app.use(cookieParser());
+// app.use(cookieParser());
 
 // view engine
 app.set('view engine', 'ejs');
 
-// create tables if they don't exist
-createTables();
-
 // routers
-app.use('/ad', details);
-app.use('/felhasznalo', users);
-app.use('/hirdetesek', advertisments);
-app.use('/deletePhoto', delPhoto);
-app.use('/showMiniDetails', miniDetails);
-app.use('/', listazas);
+app.use('/user', userJS);
+app.use('/list', listJS);
+app.use('/advertisment', advertismentJS);
+
+app.use('/', listJS);
 
 // express static middleware: statikus állományokat szolgál fel
 app.use(express.static(staticDir));
