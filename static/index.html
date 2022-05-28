@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -9,43 +10,40 @@
     <link rel='stylesheet' type='text/css' media='screen' href='/main.css'>
     <script src='/main.js'></script>
 
+    <!-- CSS only -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
-
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 </head>
 <body>
-    <nav class="navbar navbar-expand sticky-top navbar-dark bg-danger">
+
+    <nav class="navbar navbar-expand-lg sticky-top navbar-expand-lg navbar-dark bg-danger">
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo03" aria-controls="navbarTogglerDemo03" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
-        
+
         <div class="collapse navbar-collapse" id="navbarTogglerDemo03">
             <div class="navbar-nav">
-                <a class="nav-item nav-link" href="/submit"><i class="fa fa-upload"></i> Submit new advertisment</a>
-                <a class="nav-item nav-link" href="/list"><i class="fa fa-list"></i> List advertisments</a>
+                <a class="nav-item nav-link active" href="#">Submit new advertisment</a>
+                <a class="nav-item nav-link" href="#">List advertisments</a>
             </div>
             <div class="navbar-nav navbar-right">
-                <a class="nav-item nav-link" href="/user/register"><i class="fa fa-user-plus"></i> Register</a>
-                <a class="nav-item nav-link active" href="/user/login"><i class="fa fa-plus"></i> Login</a>
-                <a class="nav-item nav-link" href="/user/logout"><i class="fa fa-minus"></i> Logout</a>
+                <a class="nav-item nav-link" href="#">Register</a>
+                <a class="nav-item nav-link" href="#">Login</a>
+                <a class="nav-item nav-link" href="#">Logout</a>
             </div>
         </div>
     </nav>
 
-    <% if (errMsg) { %>
-        <div class="alert alert-danger" role="alert"><%= errMsg %></div>
-    <% } %>
-    <form method="POST" action="/user/login" class="col-md-3">
-        <div class="form-group">
+    <form method="POST" action="/user/login" class="col-md-3 needs-validation">
+        <div class="form-gro">
             <label for="lUsername">Username</label>
             <input type="text" class="form-control" name="lUsername" id="lUsername" placeholder="Username">
         </div>
-        <div class="form-group">
+        <div class="form-gro">
             <label for="lPassword">Password</label>
             <input type="password" class="form-control" name="lPassword" id="lPassword" placeholder="Password">
         </div>
         <br>
-        <div class="form-group">
+        <div class="form-gro">
             <input type="submit" class="form-control btn btn-danger" value="Login">
         </div>
     </form>

@@ -5,22 +5,22 @@ const connectionPool = mysql2.createPool({
     port: 3306,
     user: 'root',
     password: 'root',
-    database: 'Lakashirdetesek',
+    database: 'HomeAds',
     connectionLimit: 5,
 });
 
 export default connectionPool;
 
 export function createAdvertismentsTable() {
-    return connectionPool.query('CREATE TABLE IF NOT EXISTS hirdetes (HID INT AUTO_INCREMENT, Cim VARCHAR(50), Telepules VARCHAR(50), Felszinterulet INT, Ar INT, Szobak INT, Datum DATE, FID INT, PRIMARY KEY (HID), FOREIGN KEY (FID) REFERENCES felhasznalo(FID));');
+    return connectionPool.query('CREATE TABLE IF NOT EXISTS advertisments (ID INT AUTO_INCREMENT, UserID INT, Address TEXT, City TEXT, Surface INT, Price INT, Rooms INT, Date DATE, PRIMARY KEY (ID), FOREIGN KEY (UserID) REFERENCES users(ID));');
 }
 
 export function createUsersTable() {
-    return connectionPool.query('CREATE TABLE IF NOT EXISTS felhasznalo (FID INT AUTO_INCREMENT, Nev VARCHAR(50), Jelszo VARCHAR(128), Szerep VARCHAR(30), PRIMARY KEY (FID));');
+    return connectionPool.query('CREATE TABLE IF NOT EXISTS users (ID INT AUTO_INCREMENT, Name TEXT, Password TEXT, Role TEXT, PRIMARY KEY (ID));');
 }
 
 export function createPhotosTable() {
-    return connectionPool.query('CREATE TABLE IF NOT EXISTS fenykep (KID INT AUTO_INCREMENT, HID INT, KepPath VARCHAR(300), PRIMARY KEY (KID), FOREIGN KEY (HID) REFERENCES hirdetes(HID));');
+    return connectionPool.query('CREATE TABLE IF NOT EXISTS photos (ID INT AUTO_INCREMENT, AdvertismentID INT, Path TEXT, PRIMARY KEY (ID), FOREIGN KEY (AdvertismentID) REFERENCES advertisments(ID));');
 }
 
 export function createTables() {
