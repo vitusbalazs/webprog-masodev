@@ -11,7 +11,7 @@ import advertismentJS from './routes/advertisments.js';
 // db (only temp, switching to mongoDB)
 import { createTables } from './db/setupDB.js';
 
-// import cookieParser from 'cookie-parser';
+import cookieParser from 'cookie-parser';
 
 // a mappa ahonnan statikus tartalmat szolgálunk
 const staticDir = path.join(process.cwd(), 'static');
@@ -31,7 +31,7 @@ app.use(morgan('tiny'));
 
 // formidable-lel dolgozzuk fel a kéréseket
 app.use(eformidable({ uploadDir, keepExtensions: true }));
-// app.use(cookieParser());
+app.use(cookieParser());
 
 // view engine
 app.set('view engine', 'ejs');

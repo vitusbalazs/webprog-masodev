@@ -28,16 +28,17 @@
                 <a class="nav-item nav-link active" href="/user/register"><i class="fa fa-user-plus"></i> Register</a>
                 <a class="nav-item nav-link" href="/user/login"><i class="fa fa-plus"></i> Login</a>
                 <a class="nav-item nav-link" href="/user/logout"><i class="fa fa-minus"></i> Logout</a>
+                <div class="nav-item nav-link"><i class="fa fa-user"></i> <%= loginName %></div>
             </div>
         </div>
     </nav>
 
     <% if (errMsg) { %>
-        <div class="alert alert-danger" role="alert"><%= errMsg %></div>
+        <div class="alert alert-danger alert-dismissible fade show" role="alert"><%= errMsg %></div>
     <% } else if (successMsg) { %>
         <div class="alert alert-success" role="alert"><%= successMsg %></div>
     <% } %>
-    <form method="POST" action="/user/register" class="col-md-3">
+    <form method="POST" action="/user/register" class="col-md-3 center-form">
         <div class="form-group">
             <label for="rUsername">Username</label>
             <input type="text" class="form-control" name="rUsername" id="rUsername" placeholder="Username">

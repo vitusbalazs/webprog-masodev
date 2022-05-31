@@ -23,3 +23,16 @@ form {
 .btn-group > button {
     width: 100px;
 }
+
+.center-form {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.center-form-x {
+    position: relative;
+    left: 50%;
+    transform: translateX(-50%);
+}

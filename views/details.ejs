@@ -4,7 +4,7 @@
 <head>
     <meta charset='utf-8'>
     <meta http-equiv='X-UA-Compatible' content='IE=edge'>
-    <title>Page Title</title>
+    <title><%= advertisment.Address %>, <%= advertisment.City %></title>
     <meta name='viewport' content='width=device-width, initial-scale=1'>
 
     <link rel='stylesheet' type='text/css' media='screen' href='/main.css'>
@@ -29,6 +29,7 @@
                 <a class="nav-item nav-link" href="/user/register"><i class="fa fa-user-plus"></i> Register</a>
                 <a class="nav-item nav-link" href="/user/login"><i class="fa fa-plus"></i> Login</a>
                 <a class="nav-item nav-link" href="/user/logout"><i class="fa fa-minus"></i> Logout</a>
+                <div class="nav-item nav-link"><i class="fa fa-user"></i> <%= loginName %></div>
             </div>
         </div>
     </nav>
@@ -48,6 +49,7 @@
                 <p class="card-text">Price: <%= advertisment.Price %> RON</p>
                 <p class="card-text">Number of rooms: <%= advertisment.Rooms %></p>
                 <p class="card-text">Date added: <%= advertisment.Date %></p>
+                <p class="card-text">Uploaded by: <%= advertisment.Name %></p>
             </div>
         </div>
     <% } else { %>

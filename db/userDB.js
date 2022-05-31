@@ -9,6 +9,11 @@ export async function getUser(userID) {
     return user[0];
 }
 
+export async function getUserFromName(username) {
+    const [user] = await connectionPool.execute('SELECT * FROM users WHERE Name=?', [username]);
+    return user[0];
+}
+
 export async function userExists(username) {
     const [user] = await connectionPool.execute('SELECT * FROM users WHERE Name=?', [username]);
     if (user.length > 0) {
