@@ -6,7 +6,7 @@
     <title>Page Title</title>
     <meta name='viewport' content='width=device-width, initial-scale=1'>
     <link rel='stylesheet' type='text/css' media='screen' href='/main.css'>
-    <!-- <script src='/main.js'></script> -->
+    <!-- <script src='hirdetesValid.js'></script> -->
 </head>
 <body>
     <nav>
@@ -21,14 +21,14 @@
     </nav>
 
     <div id="forms">
-        <form id="searchForm" method="POST" action="/felhasznalo/loginUser">
-            <p>Bejelentkezési felület</p>
-            <label for="loginFelhasznalo">Felhasználónév</label>
-            <input type="text" name="loginFelhasznalo" id="loginFelhasznalo" required>
-            <label for="loginJelszo">Jelszó</label>
-            <input type="password" name="loginJelszo" id="loginJelszo" required>
+        <form method="POST" action="/felhasznalo/newUser">
+            <p>Felhasználó regisztrálása</p>
+            <label for="Username">Felhasználónév</label>
+            <input type="text" name="Username" id="Username" required>
+            <label for="UserPassword">Jelszó</label>
+            <input type="password" name="UserPassword" id="UserPassword" min="0" required>
 
-            <input type="submit" value="Bejelentkezés!">
+            <input type="submit" value="Regisztráció!">
         </form>
     </div>
 

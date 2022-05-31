@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset='utf-8'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <title>Page Title</title>
+    <meta name='viewport' content='width=device-width, initial-scale=1'>
+    <link rel='stylesheet' type='text/css' media='screen' href='/main.css'>
+    <script src='/main.js'></script>
+</head>
+<body>
+    <nav>
+        <a href="/hirdetesek">Beszúrás</a>
+        <a href="/">Listázás</a>
+        <a href="/felhasznalo">Bejelentkezés</a>
+        <a href="/felhasznalo/register">Regisztráció</a>
+
+        <a href="/felhasznalo/logout">Kijelentkezés</a>
+
+        <p>Currently logged in: <%= username %></p>
+    </nav>
+
+    <div id="forms">
+        <form id="searchForm">
+            <p>Lakás keresése</p>
+            <label for="keresestelepules">Település</label>
+            <input type="text" name="Telepules" id="keresestelepules" required>
+            <label for="keresesmin">Min. Ár:</label>
+            <input type="number" name="MinAr" id="keresesmin" min="0" required>
+            <label for="keresesmax">Max. Ár:</label>
+            <input type="number" name="MaxAr" id="keresesmax" min="0" required>
+
+            <input type="submit" value="Keresés!">
+        </form>
+    </div>
+
+    <div id="lista">
+        <p>Hírdetések:</p>
+        <% hirdetesek.forEach((h) => { %>
+            <div class="list-item" id="<%= h.HID %>" onclick="showDetailsBelow(this.id);">
+                <h3>ID: <%= h.HID %></h3>
+                <ul>
+                    <li>Cím: <%= h.Cim %></li>
+                    <li>Datum: <%= h.Datum %></li>
+                </ul>
+                <p class="miniDetails" id="miniDetails<%= h.HID %>"></p>
+                <a href="/ad/<%= h.HID %>"><button class="details">Fényképek megtekintése</button></a>
+            </div>
+        <% }) %>
+    </div>
+</body>
+</html>

@@ -1,17 +1,19 @@
 import connectionPool from './setupDB.js';
 
-export async function getAllAdvertisments() {
-    const [advertisments] = await connectionPool.query('SELECT * FROM advertisments');
-    return advertisments;
+export function insertAdvertisment(cim, telepules, felszin, ar, szobak, datum, user) {
+    return connectionPool.execute('INSERT INTO hirdetes VALUES (default, ?, ?, ?, ?, ?, ?, ?)', [cim, telepules, felszin, ar, szobak, datum, user]);
 }
 
-export async function getAdvertismentByID(id) {
-    const [advertisment] = await connectionPool.execute('SELECT * FROM advertisments WHERE ID=?', [id]);
-    return advertisment[0];
+export async function getAdvertisments(filter, telepules, minAr, maxAr) {
+    if (filter) {
+        const [h] = await connectionPool.execute('SELECT * FROM hirdetes WHERE Telepules=? AND Ar>=? AND Ar<=?', [telepules, minAr, maxAr]);
+        return h;
+    }
+    const [h] = await connectionPool.query('SELECT * FROM hirdetes');
+    return h;
 }
 
-export async function filterAdvertisments(city, minPrice, maxPrice) {
-    const [advertisments] = await connectionPool.execute('SELECT * FROM advertisments WHERE City=? AND Price BETWEEN ? AND ?', [city, minPrice, maxPrice]);
-    console.log(advertisments);
-    return advertisments;
+export async function getDetails(advID) {
+    const [d] = await connectionPool.execute('SELECT h.*, f.Nev FROM hirdetes AS h JOIN felhasznalo AS f ON h.FID = f.FID WHERE HID=?', [advID]);
+    return d[0];
 }
