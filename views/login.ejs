@@ -21,14 +21,17 @@
         
         <div class="collapse navbar-collapse" id="navbarTogglerDemo03">
             <div class="navbar-nav">
-                <a class="nav-item nav-link" href="/submit"><i class="fa fa-upload"></i> Submit new advertisment</a>
-                <a class="nav-item nav-link" href="/list"><i class="fa fa-list"></i> List advertisments</a>
+                <a class="nav-item nav-link" href="/submit"><i class="fa fa-upload"></i> Submit new advertisement</a>
+                <a class="nav-item nav-link" href="/list"><i class="fa fa-list"></i> List advertisements</a>
             </div>
             <div class="navbar-nav navbar-right">
-                <a class="nav-item nav-link" href="/user/register"><i class="fa fa-user-plus"></i> Register</a>
-                <a class="nav-item nav-link active" href="/user/login"><i class="fa fa-plus"></i> Login</a>
-                <a class="nav-item nav-link" href="/user/logout"><i class="fa fa-minus"></i> Logout</a>
-                <div class="nav-item nav-link"><i class="fa fa-user"></i> <%= loginName %></div>
+                <% if (loginName) { %>
+                    <div class="nav-item nav-link"><i class="fa fa-user"></i> <%= loginName %></div>
+                    <a class="nav-item nav-link" href="/user/logout"><i class="fa fa-minus"></i> Logout</a>
+                <% } else { %>
+                    <a class="nav-item nav-link" href="/user/login"><i class="fa fa-plus"></i> Login</a>
+                    <a class="nav-item nav-link" href="/user/register"><i class="fa fa-user-plus"></i> Register</a>
+                <% } %>
             </div>
         </div>
     </nav>

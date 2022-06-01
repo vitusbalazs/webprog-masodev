@@ -11,8 +11,8 @@ const connectionPool = mysql2.createPool({
 
 export default connectionPool;
 
-export function createAdvertismentsTable() {
-    return connectionPool.query('CREATE TABLE IF NOT EXISTS advertisments (ID INT AUTO_INCREMENT, UserID INT, Address TEXT, City TEXT, Surface INT, Price INT, Rooms INT, Date DATE, PRIMARY KEY (ID), FOREIGN KEY (UserID) REFERENCES users(ID));');
+export function createAdvertisementsTable() {
+    return connectionPool.query('CREATE TABLE IF NOT EXISTS advertisements (ID INT AUTO_INCREMENT, UserID INT, Address TEXT, City TEXT, Surface INT, Price INT, Rooms INT, Date DATE, PRIMARY KEY (ID), FOREIGN KEY (UserID) REFERENCES users(ID));');
 }
 
 export function createUsersTable() {
@@ -20,12 +20,12 @@ export function createUsersTable() {
 }
 
 export function createPhotosTable() {
-    return connectionPool.query('CREATE TABLE IF NOT EXISTS photos (ID INT AUTO_INCREMENT, AdvertismentID INT, Path TEXT, PRIMARY KEY (ID), FOREIGN KEY (AdvertismentID) REFERENCES advertisments(ID));');
+    return connectionPool.query('CREATE TABLE IF NOT EXISTS photos (ID INT AUTO_INCREMENT, AdvertisementID INT, Path TEXT, PRIMARY KEY (ID), FOREIGN KEY (AdvertisementID) REFERENCES advertisements(ID));');
 }
 
 export function createTables() {
     createUsersTable()
-        .then(createAdvertismentsTable)
+        .then(createAdvertisementsTable)
         .then(createPhotosTable)
         .then(() => {
             console.log('Database ready, tables created if they were non-existent');

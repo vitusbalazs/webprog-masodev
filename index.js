@@ -3,15 +3,14 @@ import path from 'path';
 import morgan from 'morgan';
 import eformidable from 'express-formidable';
 import { existsSync, mkdirSync } from 'fs';
+import cookieParser from 'cookie-parser';
 
 import userJS from './routes/user.js';
 import listJS from './routes/list.js';
-import advertismentJS from './routes/advertisments.js';
+import advertisementJS from './routes/advertisements.js';
 
 // db (only temp, switching to mongoDB)
 import { createTables } from './db/setupDB.js';
-
-import cookieParser from 'cookie-parser';
 
 // a mappa ahonnan statikus tartalmat szolgálunk
 const staticDir = path.join(process.cwd(), 'static');
@@ -30,7 +29,7 @@ const app = express();
 app.use(morgan('tiny'));
 
 // formidable-lel dolgozzuk fel a kéréseket
-app.use(eformidable({ uploadDir, keepExtensions: true }));
+app.use(eformidable({ uploadDir }));
 app.use(cookieParser());
 
 // view engine
@@ -39,8 +38,7 @@ app.set('view engine', 'ejs');
 // routers
 app.use('/user', userJS);
 app.use('/list', listJS);
-app.use('/advertisment', advertismentJS);
-
+app.use('/advertisement', advertisementJS);
 app.use('/', listJS);
 
 // express static middleware: statikus állományokat szolgál fel

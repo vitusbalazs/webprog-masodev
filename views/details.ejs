@@ -1,10 +1,9 @@
-
 <!DOCTYPE html>
 <html>
 <head>
     <meta charset='utf-8'>
     <meta http-equiv='X-UA-Compatible' content='IE=edge'>
-    <title><%= advertisment.Address %>, <%= advertisment.City %></title>
+    <title><%= advertisement.Address %>, <%= advertisement.City %></title>
     <meta name='viewport' content='width=device-width, initial-scale=1'>
 
     <link rel='stylesheet' type='text/css' media='screen' href='/main.css'>
@@ -22,14 +21,17 @@
         
         <div class="collapse navbar-collapse" id="navbarTogglerDemo03">
             <div class="navbar-nav">
-                <a class="nav-item nav-link" href="/submit"><i class="fa fa-upload"></i> Submit new advertisment</a>
-                <a class="nav-item nav-link active" href="/list"><i class="fa fa-list"></i> List advertisments</a>
+                <a class="nav-item nav-link" href="/submit"><i class="fa fa-upload"></i> Submit new advertisement</a>
+                <a class="nav-item nav-link active" href="/list"><i class="fa fa-list"></i> List advertisements</a>
             </div>
             <div class="navbar-nav navbar-right">
-                <a class="nav-item nav-link" href="/user/register"><i class="fa fa-user-plus"></i> Register</a>
-                <a class="nav-item nav-link" href="/user/login"><i class="fa fa-plus"></i> Login</a>
-                <a class="nav-item nav-link" href="/user/logout"><i class="fa fa-minus"></i> Logout</a>
-                <div class="nav-item nav-link"><i class="fa fa-user"></i> <%= loginName %></div>
+                <% if (loginName) { %>
+                    <div class="nav-item nav-link"><i class="fa fa-user"></i> <%= loginName %></div>
+                    <a class="nav-item nav-link" href="/user/logout"><i class="fa fa-minus"></i> Logout</a>
+                <% } else { %>
+                    <a class="nav-item nav-link" href="/user/login"><i class="fa fa-plus"></i> Login</a>
+                    <a class="nav-item nav-link" href="/user/register"><i class="fa fa-user-plus"></i> Register</a>
+                <% } %>
             </div>
         </div>
     </nav>
@@ -40,18 +42,36 @@
             <button class="btn btn-danger"><i class="fa fa-exclamation-triangle"></i> Delete</button>
             <button class="btn btn-secondary"><i class="fa fa-backward"></i> Back</button>
         </div>
-        <div class="card" style="width: 18rem;">
+
+        <div class="card">
             <div class="card-body">
-                <h5 class="card-title">ID: <%= advertisment.ID %></div>
-                <p class="card-text">Address: <%= advertisment.Address %></p>
-                <p class="card-text">City: <%= advertisment.City %></p>
-                <p class="card-text">Surface area: <%= advertisment.Surface %>m³</p>
-                <p class="card-text">Price: <%= advertisment.Price %> RON</p>
-                <p class="card-text">Number of rooms: <%= advertisment.Rooms %></p>
-                <p class="card-text">Date added: <%= advertisment.Date %></p>
-                <p class="card-text">Uploaded by: <%= advertisment.Name %></p>
+                <h5 class="card-title">ID: <%= advertisement.ID %></div>
+                <p class="card-text">Address: <%= advertisement.Address %></p>
+                <p class="card-text">City: <%= advertisement.City %></p>
+                <p class="card-text">Surface area: <%= advertisement.Surface %> m²</p>
+                <p class="card-text">Price: <%= advertisement.Price %> RON</p>
+                <p class="card-text">Number of rooms: <%= advertisement.Rooms %></p>
+                <p class="card-text">Date added: <%= advertisement.Date %></p>
+                <p class="card-text">Uploaded by: <%= advertisement.Name %></p>
             </div>
         </div>
+
+        <% photos.forEach((photo) => { %>
+            <img src="<%= photo.Path %>" class="advertisementPhoto">
+        <% }) %>
+
+        <% if (loginName == advertisement.Name) { %>
+            <form method="POST" action="/advertisement/details/uploadphoto/<%= advertisement.ID %>" enctype="multipart/form-data" class="col-md-3 col-lg-3 col-sm-5 col-xs-8">
+                <div class="form-group">
+                    <label for="pFile">Select a file</label>
+                    <input type="file" name="pFile" id="pFile" class="form-control" required>
+                </div>
+                <br>
+                <div class="form-group">
+                    <button type="submit" class="form-control btn btn-danger"><i class="fa fa-upload"></i> Upload</button>
+                </div>
+            </form>
+        <% } %>
     <% } else { %>
         <div class="alert alert-danger" role="alert"><%= errMsg %></div>
     <% } %>

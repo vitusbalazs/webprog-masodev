@@ -36,3 +36,12 @@ form {
     left: 50%;
     transform: translateX(-50%);
 }
+
+.card {
+    width: 24rem;
+}
+
+.advertisementPhoto {
+    max-width: 400px;
+    max-height: 300px;
+}

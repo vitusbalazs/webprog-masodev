@@ -9,22 +9,22 @@ import { getCurrentUser } from '../auth/middleware.js';
 const router = new Router();
 
 router.get('/login', (req, res) => {
-    const loginName = getCurrentUser(req) || 'Not logged in';
+    const loginName = getCurrentUser(req) || undefined;
     res.type('.html');
     res.render('login', { errMsg: '', successMsg: '', loginName });
 });
 
 router.get('/register', (req, res) => {
-    const loginName = getCurrentUser(req) || 'Not logged in';
+    const loginName = getCurrentUser(req) || undefined;
     res.type('.html');
     res.render('register', { errMsg: '', successMsg: '', loginName });
 });
 
 router.post('/login', async (req, res) => {
     res.type('.html');
-    const loginName = getCurrentUser(req) || 'Not logged in';
+    const loginName = getCurrentUser(req) || undefined;
     try {
-        if (loginName !== 'Not logged in') {
+        if (loginName !== undefined) {
             res.render('login', { errMsg: 'You are already logged in', successMsg: '', loginName });
         } else {
             const username = req.fields.lUsername;
@@ -45,9 +45,9 @@ router.post('/login', async (req, res) => {
 
 router.post('/register', async (req, res) => {
     res.type('.html');
-    const loginName = getCurrentUser(req) || 'Not logged in';
+    const loginName = getCurrentUser(req) || undefined;
     try {
-        if (loginName !== 'Not logged in') {
+        if (loginName !== undefined) {
             res.render('register', { errMsg: 'You are already logged in. Log out first!', successMsg: '', loginName });
         } else {
             const username = req.fields.rUsername;
