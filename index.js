@@ -4,13 +4,10 @@ import morgan from 'morgan';
 import eformidable from 'express-formidable';
 import { existsSync, mkdirSync } from 'fs';
 import cookieParser from 'cookie-parser';
-
 import userJS from './routes/user.js';
 import listJS from './routes/list.js';
 import advertisementJS from './routes/advertisements.js';
-
-// db (only temp, switching to mongoDB)
-import { createTables } from './db/setupDB.js';
+import { connectDB } from './db/connectMongo.js';
 
 // a mappa ahonnan statikus tartalmat szolgálunk
 const staticDir = path.join(process.cwd(), 'static');
@@ -20,7 +17,7 @@ if (!existsSync(uploadDir)) {
     mkdirSync(uploadDir);
 }
 
-createTables();
+connectDB();
 
 // inicializáljuk az express alkalmazást
 const app = express();

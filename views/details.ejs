@@ -18,10 +18,10 @@
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo03" aria-controls="navbarTogglerDemo03" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
-        
+         
         <div class="collapse navbar-collapse" id="navbarTogglerDemo03">
             <div class="navbar-nav">
-                <a class="nav-item nav-link" href="/submit"><i class="fa fa-upload"></i> Submit new advertisement</a>
+                <a class="nav-item nav-link" href="/advertisement/submit"><i class="fa fa-upload"></i> Submit new advertisement</a>
                 <a class="nav-item nav-link active" href="/list"><i class="fa fa-list"></i> List advertisements</a>
             </div>
             <div class="navbar-nav navbar-right">
@@ -52,7 +52,7 @@
                 <p class="card-text">Price: <%= advertisement.Price %> RON</p>
                 <p class="card-text">Number of rooms: <%= advertisement.Rooms %></p>
                 <p class="card-text">Date added: <%= advertisement.Date %></p>
-                <p class="card-text">Uploaded by: <%= advertisement.Name %></p>
+                <p class="card-text">Uploaded by: <%= userUploaded.username %></p>
             </div>
         </div>
 
@@ -60,7 +60,7 @@
             <img src="<%= photo.Path %>" class="advertisementPhoto">
         <% }) %>
 
-        <% if (loginName == advertisement.Name) { %>
+        <% if (loginName == userUploaded.username) { %>
             <form method="POST" action="/advertisement/details/uploadphoto/<%= advertisement.ID %>" enctype="multipart/form-data" class="col-md-3 col-lg-3 col-sm-5 col-xs-8">
                 <div class="form-group">
                     <label for="pFile">Select a file</label>
