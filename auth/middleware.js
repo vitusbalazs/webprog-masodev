@@ -1,14 +1,13 @@
 import jwt from 'jsonwebtoken';
 import secret from './secret.js';
 
-export function validateJWT(req, res, next) {
+export function validateJWT(req, res) {
     if (!req.cookies.auth) {
         res.status(401);
         res.send('You need to log in first.');
     } else {
         try {
             jwt.verify(req.cookies.auth, secret);
-            next();
         } catch (err) {
             console.error(err);
             res.clearCookie('auth');

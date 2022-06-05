@@ -12,7 +12,7 @@ export async function connectDB() {
 
         console.log('Database connected.');
     } catch (err) {
-        console.error('MongoDB connect error');
+        console.error(`MongoDB connect error ${err}`);
     }
 }
 
@@ -149,4 +149,9 @@ export async function getUserFromID(ID) {
     }
     const user = await connection.collection('users').findOne({ _id });
     return user;
+}
+
+export async function validateEmail(verifyToken) {
+    const emailVerify = await connection.collection('users').updateOne({ verifyToken }, { $set: { accountVerified: 1 } });
+    return emailVerify;
 }
