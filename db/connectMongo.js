@@ -155,3 +155,13 @@ export async function validateEmail(verifyToken) {
     const emailVerify = await connection.collection('users').updateOne({ verifyToken }, { $set: { accountVerified: 1 } });
     return emailVerify;
 }
+
+export async function updatePassword(_id, newpw) {
+    const changePassword = await connection.collection('users').updateOne({ _id }, { $set: { password: newpw } });
+    return changePassword;
+}
+
+export async function updateEmail(_id, email) {
+    const changePassword = await connection.collection('users').updateOne({ _id }, { $set: { email } });
+    return changePassword;
+}

@@ -14,27 +14,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 </head>
 <body>
-    <nav class="navbar navbar-expand sticky-top navbar-dark bg-danger">
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo03" aria-controls="navbarTogglerDemo03" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        
-        <div class="collapse navbar-collapse" id="navbarTogglerDemo03">
-            <div class="navbar-nav">
-                <a class="nav-item nav-link" href="/newadvertisement/submit"><i class="fa fa-upload"></i> Submit new advertisement</a>
-                <a class="nav-item nav-link" href="/list"><i class="fa fa-list"></i> List advertisements</a>
-            </div>
-            <div class="navbar-nav navbar-right">
-                <% if (loginName) { %>
-                    <div class="nav-item nav-link"><i class="fa fa-user"></i> <%= loginName %></div>
-                    <a class="nav-item nav-link" href="/user/logout"><i class="fa fa-minus"></i> Logout</a>
-                <% } else { %>
-                    <a class="nav-item nav-link active" href="/user/login"><i class="fa fa-plus"></i> Login</a>
-                    <a class="nav-item nav-link" href="/user/register"><i class="fa fa-user-plus"></i> Register</a>
-                <% } %>
-            </div>
-        </div>
-    </nav>
+    <%- include('partials/navbar.ejs') %>
 
     <% if (errMsg) { %>
         <div class="alert alert-danger alert-dismissible fade show" role="alert"><%= errMsg %></div>

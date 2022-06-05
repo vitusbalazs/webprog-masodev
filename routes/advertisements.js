@@ -19,10 +19,12 @@ router.get('/details/:id', async (req, res) => {
         const userUploaded = await getUserFromID(advertisement.UserID);
         const photos = await getPhotosByID(advID);
         res.render('details', {
-            errMsg: '', advertisement, photos, loginName, userUploaded,
+            errMsg: '', successMsg: '', advertisement, photos, loginName, userUploaded, navbarActive: 1,
         });
     } catch (err) {
-        res.render('details', { errMsg: 'An error occured while trying to display the advertisements', advertisements: [], loginName });
+        res.render('details', {
+            errMsg: 'An error occured while trying to display the advertisements', successMsg: '', advertisements: [], loginName, navbarActive: 1,
+        });
     }
 });
 

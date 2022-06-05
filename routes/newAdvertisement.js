@@ -27,9 +27,13 @@ router.post('/submit', async (req, res) => {
         };
         await insertAdvertisement(advertisementData);
 
-        res.render('submit', { loginName, errMsg: '', successMsg: 'Inserted successfully!' });
+        res.render('submit', {
+            loginName, errMsg: '', successMsg: 'Inserted successfully!', navbarActive: 2,
+        });
     } catch (err) {
-        res.render('submit', { loginName, errMsg: 'Error while inserting new advertisement!', successMsg: '' });
+        res.render('submit', {
+            loginName, errMsg: 'Error while inserting new advertisement!', successMsg: '', navbarActive: 2,
+        });
     }
 });
 
@@ -37,9 +41,13 @@ router.get('/submit', async (req, res) => {
     res.type('.html');
     const loginName = getCurrentUser(req) || undefined;
     try {
-        res.render('submit', { loginName, errMsg: '', successMsg: '' });
+        res.render('submit', {
+            loginName, errMsg: '', successMsg: '', navbarActive: 2,
+        });
     } catch (err) {
-        res.render('submit', { loginName, errMsg: 'Error while inserting new advertisement!', successMsg: '' });
+        res.render('submit', {
+            loginName, errMsg: 'Error while inserting new advertisement!', successMsg: '', navbarActive: 2,
+        });
     }
 });
 

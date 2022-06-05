@@ -1,18 +1,24 @@
 import jwt from 'jsonwebtoken';
 import secret from './secret.js';
 
-export function validateJWT(req, res) {
+export function validateJWT(req, res, next) {
     if (!req.cookies.auth) {
         res.status(401);
-        res.send('You need to log in first.');
+        res.type('.html');
+        res.render('login', {
+            errMsg: 'To submit advertisements, please log in first!', successMsg: '', loginName: undefined, navbarActive: 3,
+        });
     } else {
         try {
             jwt.verify(req.cookies.auth, secret);
+            next();
         } catch (err) {
             console.error(err);
-            res.clearCookie('auth');
             res.status(401);
-            res.send('JWT token not valid. Please re-login.');
+            res.type('.html');
+            res.render('login', {
+                errMsg: 'JWT token not valid. Please re-login!', successMsg: '', loginName: undefined, navbarActive: 3,
+            });
         }
     }
 }
