@@ -16,6 +16,10 @@
 <body>
     <%- include('partials/navbar.ejs') %>
 
+    <% if (successMsg) { %>
+        <div class="alert alert-success" role="alert"><%= successMsg %></div>
+    <% } %>
+
     <form method="POST" action="/list/filter" class="col-md-3 col-lg-3 col-sm-5 col-xs-8 center-form-x">
         <div class="form-group">
             <label for="sCity">City</label>

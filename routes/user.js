@@ -112,9 +112,7 @@ router.post('/login', async (req, res) => {
                     if (userFromDB.accountVerified) {
                         const token = jwt.sign({ name: username }, secret);
                         res.cookie('auth', token, { httpOnly: true, sameSite: 'strict' });
-                        res.render('login', {
-                            errMsg: '', successMsg: 'You have successfully logged in.', loginName: username, navbarActive: 3,
-                        });
+                        res.redirect('/list');
                     } else {
                         res.render('login', {
                             errMsg: 'Your account is not yet verified. Check your emails!', successMsg: '', loginName, navbarActive: 3,

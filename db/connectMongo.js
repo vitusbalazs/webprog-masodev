@@ -124,6 +124,18 @@ export async function getPhotosByID(ID) {
     }
 }
 
+export async function deletePhotoByID(ID) {
+    let _id;
+    if (typeof (ID) === 'string') {
+        _id = parseInt(ID, 10);
+    } else {
+        _id = ID;
+    }
+    const filename = await connection.collection('photos').findOne({ _id });
+    await connection.collection('photos').deleteOne({ _id });
+    return filename.Path;
+}
+
 // user
 
 export async function insertUser(userData) {
@@ -151,6 +163,11 @@ export async function getUserFromID(ID) {
     return user;
 }
 
+export async function getAllUsers() {
+    const user = await connection.collection('users').find().toArray();
+    return user;
+}
+
 export async function validateEmail(verifyToken) {
     const emailVerify = await connection.collection('users').updateOne({ verifyToken }, { $set: { accountVerified: 1 } });
     return emailVerify;
@@ -164,4 +181,24 @@ export async function updatePassword(_id, newpw) {
 export async function updateEmail(_id, email) {
     const changePassword = await connection.collection('users').updateOne({ _id }, { $set: { email } });
     return changePassword;
+}
+
+// chat
+
+export async function getMessagesByUsername(username) {
+    const sentMessages = await connection.collection('messages').find({ userSent: username }).toArray();
+    const receivedMessages = await connection.collection('messages').find({ userReceived: username }).toArray();
+
+    const messages = sentMessages.concat(receivedMessages);
+
+    messages.sort((a, b) => {
+        if (a.date > b.date) {
+            return 1;
+        }
+        if (a.date < b.date) {
+            return -1;
+        }
+        return 0;
+    });
+    return messages;
 }

@@ -8,6 +8,7 @@ import userJS from './routes/user.js';
 import listJS from './routes/list.js';
 import advertisementJS from './routes/advertisements.js';
 import newAdvertisementsJS from './routes/newAdvertisement.js';
+import chatJS from './routes/chat.js';
 import { connectDB } from './db/connectMongo.js';
 
 // a mappa ahonnan statikus tartalmat szolgálunk
@@ -38,6 +39,7 @@ app.use('/user', userJS);
 app.use('/list', listJS);
 app.use('/advertisement', advertisementJS);
 app.use('/newadvertisement', newAdvertisementsJS);
+app.use('/chat', chatJS);
 app.use('/', listJS);
 
 // express static middleware: statikus állományokat szolgál fel

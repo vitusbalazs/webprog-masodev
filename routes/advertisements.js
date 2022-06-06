@@ -1,9 +1,11 @@
 import Router from 'express';
+import { unlinkSync } from 'fs';
 import path from 'path';
 import { getCurrentUser } from '../auth/middleware.js';
 
 import {
-    getAdvertisementByID, getPhotosIndex, getUserFromID, insertPhoto, getPhotosByID,
+    getAdvertisementByID, getPhotosIndex, getUserFromID,
+    insertPhoto, getPhotosByID, deletePhotoByID, getUserFromName,
 } from '../db/connectMongo.js';
 
 const router = new Router();
@@ -18,8 +20,9 @@ router.get('/details/:id', async (req, res) => {
         const advertisement = await getAdvertisementByID(advID);
         const userUploaded = await getUserFromID(advertisement.UserID);
         const photos = await getPhotosByID(advID);
+        const localUser = await getUserFromName(loginName);
         res.render('details', {
-            errMsg: '', successMsg: '', advertisement, photos, loginName, userUploaded, navbarActive: 1,
+            errMsg: '', successMsg: '', advertisement, photos, loginName, userUploaded, navbarActive: 1, localUser,
         });
     } catch (err) {
         res.render('details', {
@@ -50,6 +53,28 @@ router.post('/details/uploadphoto/:id', async (req, res) => {
         res.redirect(`/advertisement/details/${AdvID}`);
     } catch (err) {
         console.log(err);
+    }
+});
+
+router.delete('/deletePhoto/:id', async (req, res) => {
+    const toDeletePhotoID = req.params.id;
+    try {
+        const photoPath = await deletePhotoByID(toDeletePhotoID);
+        const separator = photoPath.charAt(0);
+        const pathFromDB = photoPath.split(separator);
+
+        let unlinkPath = 'static';
+        for (let i = 0; i < pathFromDB.length; i += 1) {
+            unlinkPath = path.join(unlinkPath, pathFromDB[i]);
+        }
+        unlinkSync(unlinkPath);
+
+        res.status(200);
+        res.end();
+    } catch (err) {
+        console.log(err);
+        res.status(500);
+        res.end();
     }
 });
 
