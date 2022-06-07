@@ -5,7 +5,7 @@ import { getCurrentUser } from '../auth/middleware.js';
 
 import {
     getAdvertisementByID, getPhotosIndex, getUserFromID,
-    insertPhoto, getPhotosByID, deletePhotoByID, getUserFromName,
+    insertPhoto, getPhotosByID, deletePhotoByID, getUserFromName, deleteAdvertisementByID,
 } from '../db/connectMongo.js';
 
 const router = new Router();
@@ -20,9 +20,14 @@ router.get('/details/:id', async (req, res) => {
         const advertisement = await getAdvertisementByID(advID);
         const userUploaded = await getUserFromID(advertisement.UserID);
         const photos = await getPhotosByID(advID);
-        const localUser = await getUserFromName(loginName);
+        let userFromDB;
+        if (loginName) {
+            userFromDB = await getUserFromName(loginName);
+        } else {
+            userFromDB = { role: 'guest' };
+        }
         res.render('details', {
-            errMsg: '', successMsg: '', advertisement, photos, loginName, userUploaded, navbarActive: 1, localUser,
+            errMsg: '', successMsg: '', advertisement, photos, loginName, userUploaded, navbarActive: 1, localUser: userFromDB,
         });
     } catch (err) {
         res.render('details', {
@@ -75,6 +80,28 @@ router.delete('/deletePhoto/:id', async (req, res) => {
         console.log(err);
         res.status(500);
         res.end();
+    }
+});
+
+router.use('/delete', async (req, res) => {
+    try {
+        const advID = req.query.AdvertisementID;
+        await deleteAdvertisementByID(advID);
+        res.redirect('/list');
+    } catch (err) {
+        console.log(err);
+    }
+});
+
+router.get('/getMiniDetails/:id', async (req, res) => {
+    try {
+        const advID = req.params.id;
+        const adv = await getAdvertisementByID(advID);
+        res.status(200);
+        res.end(JSON.stringify(adv));
+    } catch (err) {
+        res.status(500);
+        res.end(null);
     }
 });
 

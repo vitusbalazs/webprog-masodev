@@ -17,17 +17,22 @@
     <%- include('partials/navbar.ejs') %>
 
     <% if (!errMsg) { %>
-        <div class="btn-group">
+        <!-- <div class="btn-group" id="detailsGroup">
             <button class="btn btn-success"><i class="fa fa-money"></i> Buy</button>
             <button class="btn btn-danger"><i class="fa fa-exclamation-triangle"></i> Delete</button>
             <button class="btn btn-secondary"><i class="fa fa-backward"></i> Back</button>
-        </div>
-
+        </div> -->
         <% if (successMsg) { %>
             <div class="alert alert-success" role="alert"><%= successMsg %></div>
         <% } %>
 
-        <div class="card">
+        <% if (userUploaded.username === loginName || localUser.role === 'admin') { %>
+            <br>
+            <a href="/advertisement/delete?AdvertisementID=<%= advertisement.ID %>"><button class="btn btn-outline-danger center-form-x"><i class="fa fa-trash"></i> Delete advertisement</button></a>
+            <br><br>
+        <% } %>
+
+        <div class="card center-form-x">
             <div class="card-body">
                 <h5 class="card-title">ID: <%= advertisement.ID %></div>
                 <p class="card-text">Address: <%= advertisement.Address %></p>
@@ -44,7 +49,7 @@
         <ul class="list-group">
             <% photos.forEach((photo) => { %>
                 <li id="photo<%= photo._id %>" class="list-group-item">
-                    <img src="<%= photo.Path %>" class="advertisementPhoto">
+                    <img src="<%= photo.Path %>" class="advertisementPhoto center-form-x">
                     <% if (userUploaded.username === loginName || localUser.role === 'admin') { %>
                         <button id="<%= photo._id %>" class="btn btn-outline-danger" onclick="deletePhoto(this.id);"><i class="fa fa-trash"></i> Delete photo</button>
                     <% } %>
@@ -52,9 +57,8 @@
             <% }) %>
         </ul>
 
-
         <% if (loginName == userUploaded.username) { %>
-            <form method="POST" action="/advertisement/details/uploadphoto/<%= advertisement.ID %>" enctype="multipart/form-data" class="col-md-3 col-lg-3 col-sm-5 col-xs-8">
+            <form method="POST" action="/advertisement/details/uploadphoto/<%= advertisement.ID %>" enctype="multipart/form-data" class="col-md-3 col-lg-3 col-sm-5 col-xs-8 center-form-x">
                 <div class="form-group">
                     <label for="pFile">Select a file</label>
                     <input type="file" name="pFile" id="pFile" class="form-control" required>

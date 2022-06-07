@@ -32,11 +32,11 @@ form {
     padding: 10px;
 }
 
-.btn-group {
+#detailsGroup {
     margin: 5px;
 }
 
-.btn-group > button {
+#detailsGroup > button {
     width: 100px;
 }
 

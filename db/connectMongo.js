@@ -103,6 +103,18 @@ export async function filterAdvertisements(city, minPrice, maxPrice) {
     }
 }
 
+export async function deleteAdvertisementByID(ID) {
+    let _id;
+    if (typeof (ID) === 'string') {
+        _id = parseInt(ID, 10);
+    } else {
+        _id = ID;
+    }
+    await connection.collection('photos').deleteMany({ AdvertisementID: _id });
+    const deleteAdv = connection.collection('advertisements').deleteOne({ _id });
+    return deleteAdv;
+}
+
 // photo
 
 export async function insertPhoto(photoData) {
@@ -163,6 +175,11 @@ export async function getUserFromID(ID) {
     return user;
 }
 
+export async function getUserFromEmail(email) {
+    const user = await connection.collection('users').findOne({ email });
+    return user;
+}
+
 export async function getAllUsers() {
     const user = await connection.collection('users').find().toArray();
     return user;
@@ -180,6 +197,11 @@ export async function updatePassword(_id, newpw) {
 
 export async function updateEmail(_id, email) {
     const changePassword = await connection.collection('users').updateOne({ _id }, { $set: { email } });
+    return changePassword;
+}
+
+export async function updatePasswordByToken(verifyToken, newpw) {
+    const changePassword = await connection.collection('users').updateOne({ verifyToken }, { $set: { password: newpw } });
     return changePassword;
 }
 
@@ -201,4 +223,18 @@ export async function getMessagesByUsername(username) {
         return 0;
     });
     return messages;
+}
+
+export async function insertNewMessage(msgData) {
+    await connection.collection('messages').insertOne(msgData);
+}
+
+export async function promoteAdminDB(username) {
+    const roleChange = await connection.collection('users').updateOne({ username }, { $set: { role: 'admin' } });
+    return roleChange;
+}
+
+export async function revokeAdminDB(username) {
+    const roleChange = await connection.collection('users').updateOne({ username }, { $set: { role: 'user' } });
+    return roleChange;
 }

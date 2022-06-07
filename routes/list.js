@@ -20,7 +20,6 @@ router.get('/', async (req, res) => {
 });
 
 router.post('/filter', async (req, res) => {
-    //
     res.type('.html');
     const loginName = getCurrentUser(req) || undefined;
     try {

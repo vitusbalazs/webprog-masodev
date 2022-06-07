@@ -21,20 +21,16 @@
     <% } else if (successMsg) { %>
         <div class="alert alert-success" role="alert"><%= successMsg %></div>
     <% } %>
-    <form method="POST" action="/user/login" class="col-md-3 center-form">
+    <br><br>
+    <form method="POST" action="/user/recoverPassword" class="col-md-3 center-form">
         <div class="form-group">
-            <label for="lUsername">Username</label>
-            <input type="text" class="form-control" name="lUsername" id="lUsername" placeholder="Username">
-        </div>
-        <div class="form-group">
-            <label for="lPassword">Password</label>
-            <input type="password" class="form-control" name="lPassword" id="lPassword" placeholder="Password">
+            <label for="prEmail">Current e-mail</label>
+            <input type="email" class="form-control" name="prEmail" id="prEmail" placeholder="E-mail address">
         </div>
         <br>
         <div class="form-group">
-            <input type="submit" class="form-control btn btn-danger" value="Login">
+            <input type="submit" class="form-control btn btn-danger" value="Change password">
         </div>
-        <a href="/user/forgotPassword"><input type="button" class="btn btn-outline-danger col-12" style="margin-top: 10px;" value="Forgot my password..."></a>
     </form>
 </body>
 </html>

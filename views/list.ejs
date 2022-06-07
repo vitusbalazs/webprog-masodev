@@ -48,7 +48,11 @@
                     <p>City: <%= adv.City %></p>
                     <p>Price: <%= adv.Price %></p>
 
-                    <button class="btn btn-danger"><i class="fa fa-question"></i> Details</button>
+                    <div id="listDetails<%= adv.ID %>"></div>
+                    
+                    <p class="miniDetailsError<%= adv.ID %>"></p>
+
+                    <button class="btn btn-danger" onclick="getDetailsList('<%= adv.ID %>')"><i class="fa fa-question"></i> Details</button>
                     <a href="/advertisement/details/<%= adv.ID %>"><button class="btn btn-outline-danger"><i class="fa fa-image"></i> Photos and interactions</button></a>
                 </li>
             <% }) %>

@@ -1,2 +1,6 @@
 forgot password
 google maps api
+promote
+revoke
+admin tudjon törölni képet, hírdetést
+felhasználó tudjon törölni saját hírdetést

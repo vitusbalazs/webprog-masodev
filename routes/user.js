@@ -6,7 +6,9 @@ import nodemailer from 'nodemailer';
 import secret from '../auth/secret.js';
 import { getCurrentUser } from '../auth/middleware.js';
 import {
-    getUserFromName, getUsersIndex, insertUser, updateEmail, updatePassword, validateEmail,
+    getUserFromEmail,
+    getUserFromName, getUsersIndex, insertUser, promoteAdminDB,
+    revokeAdminDB, updateEmail, updatePassword, updatePasswordByToken, validateEmail,
 } from '../db/connectMongo.js';
 
 function sendEmail(email, subject, text) {
@@ -83,6 +85,35 @@ router.get('/verify', async (req, res) => {
     }
 });
 
+router.get('/forgotPassword', (req, res) => {
+    const loginName = getCurrentUser(req) || undefined;
+    res.type('.html');
+    try {
+        res.render('recovery', {
+            errMsg: '', successMsg: '', loginName, navbarActive: 3,
+        });
+    } catch (err) {
+        res.render('recovery', {
+            errMsg: 'There was an error while recovering your account', successMsg: '', loginName, navbarActive: 3,
+        });
+    }
+});
+
+router.get('/recover', async (req, res) => {
+    const loginName = getCurrentUser(req) || undefined;
+    res.type('.html');
+    const userToken = req.query.token;
+    try {
+        res.render('recoveryChangeForm', {
+            errMsg: '', successMsg: '', loginName, navbarActive: 3, userToken,
+        });
+    } catch (err) {
+        res.render('recoveryChangeForm', {
+            errMsg: 'There was an error while recovering your account', successMsg: '', loginName, navbarActive: 3, userToken,
+        });
+    }
+});
+
 router.get('/logout', async (req, res) => {
     try {
         res.clearCookie('auth');
@@ -94,6 +125,50 @@ router.get('/logout', async (req, res) => {
 });
 
 // Router POST methods
+
+router.post('/recoverPassword', async (req, res) => {
+    const loginName = getCurrentUser(req) || undefined;
+    res.type('.html');
+    try {
+        const email = req.fields.prEmail;
+        const user = await getUserFromEmail(email);
+        if (user) {
+            sendEmail(user.email, 'Password recovery!', `You've requested a password change, because you've forgotten your password.\nPlease click on this link: http://localhost:8080/user/recover?token=${user.verifyToken}`);
+        }
+        res.render('recovery', {
+            errMsg: '', successMsg: 'Password recovery e-mail successfully sent (if user exists with this e-mail)!', loginName, navbarActive: 3,
+        });
+    } catch (err) {
+        res.render('recovery', {
+            errMsg: `There was an error while recovering your account ${err}`, successMsg: '', loginName, navbarActive: 3,
+        });
+    }
+});
+
+router.post('/storeNewPassword', async (req, res) => {
+    try {
+        const userToken = req.query.token;
+        const newPW = req.fields.prPW;
+        const newPWConfirmation = req.fields.prPW2;
+        if (newPW === newPWConfirmation) {
+            const passwordHashed = bcrypt.hashSync(newPW, 10);
+            await updatePasswordByToken(userToken, passwordHashed);
+            res.type('.html');
+            res.render('login', {
+                errMsg: '', successMsg: 'You have successfully changed your password. You can log in now!', loginName: undefined, navbarActive: 3,
+            });
+        } else {
+            res.render('recovery', {
+                errMsg: 'The passwords are not matching!', successMsg: '', loginName: undefined, navbarActive: 3,
+            });
+        }
+    } catch (err) {
+        res.type('.html');
+        res.render('login', {
+            errMsg: `There was an error while changing your password. Please try again later! ${err}`, successMsg: '', loginName: undefined, navbarActive: 3,
+        });
+    }
+});
 
 router.post('/login', async (req, res) => {
     res.type('.html');
@@ -245,6 +320,21 @@ router.post('/changeEmail', async (req, res) => {
         res.render('userDetails', {
             errMsg: 'There was an error while trying to change your e-mail address.', successMsg: '', loginName, navbarActive: 5,
         });
+    }
+});
+
+router.post('/setAdminStatus', async (req, res) => {
+    const username = req.query.user;
+    const role = req.query.newRole;
+
+    if (role === 'admin') {
+        promoteAdminDB(username);
+        res.status(200);
+        res.end();
+    } else {
+        revokeAdminDB(username);
+        res.status(500);
+        res.end();
     }
 });
 

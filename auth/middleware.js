@@ -6,7 +6,7 @@ export function validateJWT(req, res, next) {
         res.status(401);
         res.type('.html');
         res.render('login', {
-            errMsg: 'To submit advertisements, please log in first!', successMsg: '', loginName: undefined, navbarActive: 3,
+            errMsg: 'You need to log in first!', successMsg: '', loginName: undefined, navbarActive: 3,
         });
     } else {
         try {

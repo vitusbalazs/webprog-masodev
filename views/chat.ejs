@@ -21,7 +21,35 @@
     <% } else if (successMsg) { %>
         <div class="alert alert-success" role="alert"><%= successMsg %></div>
     <% } %>
-
-    
+    <br>
+    <select class="form-select" name="peopleSelect" id="peopleSelect" onchange="getMessages('<%= loginName %>', '<%= userFromDB.role %>');">
+        <option value="" selected disabled hidden>Choose someone</option>
+        <% users.forEach((user) => { %>
+            <% if (user.username !== loginName) { %>
+                <option value="<%= user.username %>"><%= user.username %></option>
+            <% } %>
+        <% }); %>
+    </select>
+    <% if (userFromDB.role === 'admin') { %>
+        <br>
+        <div class="btn-group">
+            <button id="promote" class="btn btn-success" onclick="promoteAdmin();" disabled><i class="fa fa-shield"></i> Promote as admin</button>
+            <button id="revoke" class="btn btn-danger" onclick="revokeAdmin();" disabled><i class="fa fa-user-times"></i> Remove admin</button>
+        </div>
+    <% } %>
+    <br>
+    <br>
+    <ul class="list-group" id="messages"></ul>
+    <br>
+    <form enctype="multipart/form-data" class="center-form-x col-md-3 col-lg-3 col-sm-5 col-xs-8">
+        <div class="form-group">
+            <label for="smMessage">Your message</label>
+            <input type="text" name="smMessage" id="smMessage" class="form-control" placeholder="Message" required>
+        </div>
+        <br>
+        <div class="form-group">
+            <button type="submit" class="form-control btn btn-danger" id="sendMessageButton" disabled onclick="sendMessage(event, '<%= loginName %>');"><i class="fa fa-envelope"></i> Send</button>
+        </div>
+    </form>
 </body>
 </html>
