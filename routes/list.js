@@ -1,6 +1,8 @@
 import Router from 'express';
 import { getCurrentUser } from '../auth/middleware.js';
-import { filterAdvertisements, getAllAdvertisements } from '../db/connectMongo.js';
+import {
+    filterAdvertisements, getAllAdvertisements,
+} from '../db/advertisementsMongo.js';
 
 const router = new Router();
 

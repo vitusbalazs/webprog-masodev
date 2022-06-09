@@ -4,9 +4,14 @@ import path from 'path';
 import { getCurrentUser } from '../auth/middleware.js';
 
 import {
-    getAdvertisementByID, getPhotosIndex, getUserFromID,
-    insertPhoto, getPhotosByID, deletePhotoByID, getUserFromName, deleteAdvertisementByID,
-} from '../db/connectMongo.js';
+    getUserFromID, getUserFromName,
+} from '../db/usersMongo.js';
+import {
+    getAdvertisementByID, deleteAdvertisementByID,
+} from '../db/advertisementsMongo.js';
+import {
+    getPhotosIndex, getPhotosByID, deletePhotoByID, insertPhoto,
+} from '../db/photosMongo.js';
 
 const router = new Router();
 

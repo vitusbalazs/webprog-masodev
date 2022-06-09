@@ -9,6 +9,7 @@ import listJS from './routes/list.js';
 import advertisementJS from './routes/advertisements.js';
 import newAdvertisementsJS from './routes/newAdvertisement.js';
 import chatJS from './routes/chat.js';
+import dberrorJS from './routes/dberror.js';
 import { connectDB } from './db/connectMongo.js';
 
 // a mappa ahonnan statikus tartalmat szolgálunk
@@ -18,8 +19,6 @@ const uploadDir = path.join(staticDir, 'uploaded');
 if (!existsSync(uploadDir)) {
     mkdirSync(uploadDir);
 }
-
-connectDB();
 
 // inicializáljuk az express alkalmazást
 const app = express();
@@ -34,15 +33,23 @@ app.use(cookieParser());
 // view engine
 app.set('view engine', 'ejs');
 
-// routers
-app.use('/user', userJS);
-app.use('/list', listJS);
-app.use('/advertisement', advertisementJS);
-app.use('/newadvertisement', newAdvertisementsJS);
-app.use('/chat', chatJS);
-app.use('/', listJS);
+connectDB()
+    .then((isConnection) => {
+        if (isConnection) {
+            // routers
+            app.use('/user', userJS);
+            app.use('/list', listJS);
+            app.use('/advertisement', advertisementJS);
+            app.use('/newadvertisement', newAdvertisementsJS);
+            app.use('/chat', chatJS);
+            app.use('/', listJS);
 
-// express static middleware: statikus állományokat szolgál fel
-app.use(express.static(staticDir));
+            // express static middleware: statikus állományokat szolgál fel
+            app.use(express.static(staticDir));
+        } else {
+            app.use('/', dberrorJS);
+        }
+    });
+
 
 app.listen(8080, () => { console.log('Server listening on http://localhost:8080/ ...'); });

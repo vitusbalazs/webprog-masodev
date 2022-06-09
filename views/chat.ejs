@@ -32,7 +32,7 @@
     </select>
     <% if (userFromDB.role === 'admin') { %>
         <br>
-        <div class="btn-group">
+        <div class="btn-group center-form-x">
             <button id="promote" class="btn btn-success" onclick="promoteAdmin();" disabled><i class="fa fa-shield"></i> Promote as admin</button>
             <button id="revoke" class="btn btn-danger" onclick="revokeAdmin();" disabled><i class="fa fa-user-times"></i> Remove admin</button>
         </div>

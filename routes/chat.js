@@ -1,8 +1,12 @@
 import Router from 'express';
+
 import { getCurrentUser, validateJWT } from '../auth/middleware.js';
 import {
-    getAllUsers, getMessagesByUsername, getUserFromName, insertNewMessage,
-} from '../db/connectMongo.js';
+    getAllUsers, getUserFromName,
+} from '../db/usersMongo.js';
+import {
+    getMessagesByUsername, insertNewMessage,
+} from '../db/messagesMongo.js';
 
 const router = new Router();
 

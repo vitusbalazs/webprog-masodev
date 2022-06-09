@@ -1,7 +1,12 @@
 import Router from 'express';
 import { getCurrentUser, validateJWT } from '../auth/middleware.js';
 
-import { getAdvertisementsIndex, getUserFromName, insertAdvertisement } from '../db/connectMongo.js';
+import {
+    getUserFromName,
+} from '../db/usersMongo.js';
+import {
+    getAdvertisementsIndex, insertAdvertisement,
+} from '../db/advertisementsMongo.js';
 
 const router = new Router();
 

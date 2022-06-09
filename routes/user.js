@@ -6,10 +6,9 @@ import nodemailer from 'nodemailer';
 import secret from '../auth/secret.js';
 import { getCurrentUser } from '../auth/middleware.js';
 import {
-    getUserFromEmail,
-    getUserFromName, getUsersIndex, insertUser, promoteAdminDB,
+    getUserFromEmail, getUserFromName, getUsersIndex, insertUser, promoteAdminDB,
     revokeAdminDB, updateEmail, updatePassword, updatePasswordByToken, validateEmail,
-} from '../db/connectMongo.js';
+} from '../db/usersMongo.js';
 
 function sendEmail(email, emailSubject, text) {
     let subject = 'Home advertisements';
