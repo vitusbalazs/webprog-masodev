@@ -1,21 +1,34 @@
 {
-  "name": "webprojekt",
+  "name": "lab-vbim2101",
   "version": "1.0.0",
-  "description": "",
+  "description": "npm project",
   "main": "index.js",
   "type": "module",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "",
+  "repository": {
+    "type": "git",
+    "url": "git+https://gitlab.com/ubb-webprog/labs2022/lab-vbim2101.git"
+  },
+  "author": "vitusbalazs",
   "license": "ISC",
+  "bugs": {
+    "url": "https://gitlab.com/ubb-webprog/labs2022/lab-vbim2101/issues"
+  },
+  "homepage": "https://gitlab.com/ubb-webprog/labs2022/lab-vbim2101#readme",
+  "devDependencies": {
+    "eslint": "^8.13.0",
+    "eslint-config-airbnb-base": "^15.0.0",
+    "eslint-plugin-import": "^2.26.0",
+    "nodemon": "^2.0.16"
+  },
   "dependencies": {
     "bcrypt": "^5.0.1",
     "cookie-parser": "^1.4.6",
     "ejs": "^3.1.8",
     "express": "^4.18.1",
     "express-formidable": "^1.2.0",
-    "formidable": "^3.2.4",
     "jsonwebtoken": "^8.5.1",
     "mongodb": "^4.6.0",
     "morgan": "^1.10.0",

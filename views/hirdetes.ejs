@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset='utf-8'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <title>Page Title</title>
+    <meta name='viewport' content='width=device-width, initial-scale=1'>
+    <link rel='stylesheet' type='text/css' media='screen' href='/main.css'>
+    <!-- <script src='hirdetesValid.js'></script> -->
+</head>
+<body>
+    <nav>
+        <a href="/hirdetesek">Beszúrás</a>
+        <a href="/">Listázás</a>
+        <a href="/felhasznalo">Bejelentkezés</a>
+        <a href="/felhasznalo/register">Regisztráció</a>
+
+        <a href="/felhasznalo/logout">Kijelentkezés</a>
+
+        <p>Currently logged in: <%= username %></p>
+    </nav>
+
+    <div id="forms">
+        <form method="POST" action="/hirdetesek/submitNew">
+            <p>Lakáshírdetés feladása</p>
+            <label for="felhasznalo">Felhasználó:</label>
+            <!-- <input type="text" name="Felhasznalo" id="lakasfelhasznalo" required> -->
+            <select name="Felhasznalo" id="lakasfelhasznalo">
+                <option value="<%= felhasznalo.FID %>"><%= felhasznalo.Nev %></option>
+            </select>
+            <label for="lakascim">Cím:</label>
+            <input type="text" name="Cim" id="lakascim" required>
+            <label for="lakastelepules">Település:</label>
+            <input type="text" name="Telepules" id="lakastelepules" required>
+            <label for="lakasfelszin">Felszínterület:</label>
+            <input type="number" name="Felszinterulet" id="lakasfelszin" min="1" required>
+            <label for="lakasar">Ár:</label>
+            <input type="number" name="Ar" id="lakasar" min="1" required>
+            <label for="lakasszobak">Szobák száma:</label>
+            <input type="number" name="SzobakSzama" id="lakasszobak" min="1" required>
+            <label for="lakasdatum">Dátum:</label>
+            <input type="date" name="Datum" id="lakasdatum" required>
+
+            <input type="submit" value="Feltöltés!">
+        </form>
+    </div>
+
+    <p><%= errors %></p>
+</body>
+</html>

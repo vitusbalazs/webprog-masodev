@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset='utf-8'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <title>Page Title</title>
+    <meta name='viewport' content='width=device-width, initial-scale=1'>
+    <link rel='stylesheet' type='text/css' media='screen' href='/main.css'>
+    <!-- <script src='hirdetesValid.js'></script> -->
+</head>
+<body>
+    <nav>
+        <a href="/hirdetesek">Beszúrás</a>
+        <a href="/">Listázás</a>
+        <a href="/felhasznalo">Bejelentkezés</a>
+        <a href="/felhasznalo/register">Regisztráció</a>
+
+        <a href="/felhasznalo/logout">Kijelentkezés</a>
+
+        <p>Currently logged in: <%= username %></p>
+    </nav>
+
+    <div id="forms">
+        <form method="POST" action="/felhasznalo/newUser">
+            <p>Felhasználó regisztrálása</p>
+            <label for="Username">Felhasználónév</label>
+            <input type="text" name="Username" id="Username" required>
+            <label for="UserPassword">Jelszó</label>
+            <input type="password" name="UserPassword" id="UserPassword" min="0" required>
+
+            <input type="submit" value="Regisztráció!">
+        </form>
+    </div>
+
+    <p><%= error %></p>
+</body>
+</html>

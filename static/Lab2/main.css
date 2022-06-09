@@ -1,0 +1,11 @@
+input {
+    margin-bottom: 10px;
+}
+
+footer {
+    text-align: center;
+}
+
+#jsresults {
+    visibility: hidden;
+}
