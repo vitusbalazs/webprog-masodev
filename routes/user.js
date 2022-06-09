@@ -11,7 +11,9 @@ import {
     revokeAdminDB, updateEmail, updatePassword, updatePasswordByToken, validateEmail,
 } from '../db/connectMongo.js';
 
-function sendEmail(email, subject, text) {
+function sendEmail(email, emailSubject, text) {
+    let subject = 'Home advertisements';
+    subject = subject.concat(' - ', emailSubject);
     const transporter = nodemailer.createTransport({
         host: 'smtp.gmail.com',
         port: 587,
@@ -73,7 +75,6 @@ router.get('/verify', async (req, res) => {
     const loginName = getCurrentUser(req) || undefined;
     try {
         const queryToken = req.query.token;
-        console.log(queryToken);
         await validateEmail(queryToken);
         res.type('.html');
         res.render('login', {
@@ -133,7 +134,7 @@ router.post('/recoverPassword', async (req, res) => {
         const email = req.fields.prEmail;
         const user = await getUserFromEmail(email);
         if (user) {
-            sendEmail(user.email, 'Password recovery!', `You've requested a password change, because you've forgotten your password.\nPlease click on this link: http://localhost:8080/user/recover?token=${user.verifyToken}`);
+            sendEmail(user.email, 'Password recovery!', `You've requested a password change.\nPlease click on this link to recover your account: http://localhost:8080/user/recover?token=${user.verifyToken}`);
         }
         res.render('recovery', {
             errMsg: '', successMsg: 'Password recovery e-mail successfully sent (if user exists with this e-mail)!', loginName, navbarActive: 3,
@@ -211,6 +212,10 @@ router.post('/login', async (req, res) => {
     }
 });
 
+function checkData(username, password, email) {
+    return password.length >= 6 && username.length >= 6 && email.match(/.+@.+\..+/);
+}
+
 router.post('/register', async (req, res) => {
     res.type('.html');
     const loginName = getCurrentUser(req) || undefined;
@@ -222,12 +227,24 @@ router.post('/register', async (req, res) => {
         } else {
             const username = req.fields.rUsername;
             const email = req.fields.rEmail;
-            if (await getUserFromName(username)) {
+            const password = req.fields.rPassword;
+
+            const usernameExists = await getUserFromName(username);
+            const emailExists = await getUserFromEmail(email);
+
+            if (usernameExists) {
                 res.render('register', {
                     errMsg: 'There is already a user registered with this username. Please choose another one.', successMsg: '', loginName, navbarActive: 4,
                 });
+            } else if (emailExists) {
+                res.render('register', {
+                    errMsg: 'There is already a user registered with this email. Please choose another one.', successMsg: '', loginName, navbarActive: 4,
+                });
+            } else if (!checkData(username, password, email)) {
+                res.render('register', {
+                    errMsg: 'Your username and password must contain at least 6 characters and your e-mail must have the following format: *@*.*', successMsg: '', loginName, navbarActive: 4,
+                });
             } else {
-                const password = req.fields.rPassword;
                 const passwordHashed = bcrypt.hashSync(password, 10);
 
                 const lastUserIndex = await getUsersIndex();
@@ -253,7 +270,6 @@ router.post('/register', async (req, res) => {
             }
         }
     } catch (err) {
-        console.log(err);
         res.render('register', {
             errMsg: `There was an error while registering: ${err}`, successMsg: '', loginName, navbarActive: 4,
         });
@@ -275,7 +291,7 @@ router.post('/changePassword', async (req, res) => {
                 res.render('userDetails', {
                     errMsg: '', successMsg: 'Password successfully changed!', loginName, navbarActive: 5,
                 });
-                sendEmail(userFromDB.email, 'Your password has been changed!', 'Your password has been changed. If you don\'t remember changing your password, please contact our customer support or change your password using the \'I forgot my password\' section!');
+                sendEmail(userFromDB.email, 'Your password has been changed!', 'Your password has been changed. If you don\'t remember changing your password, please change it again using the \'I forgot my password\' button on the login panel!');
             } else {
                 res.type('.html');
                 res.render('userDetails', {
@@ -304,7 +320,7 @@ router.post('/changeEmail', async (req, res) => {
         const userFromDB = await getUserFromName(loginName);
         if (oldemail === userFromDB.email) {
             await updateEmail(userFromDB._id, newemail);
-            sendEmail(userFromDB.email, 'Your e-mail address has been changed!', `Your e-mail address has been changed to ${newemail}. If you don't remember changing your e-mail, please contatct our customer support or change your password and e-mail immediatelly!`);
+            sendEmail(userFromDB.email, 'Your e-mail address has been changed!', `Your e-mail address has been changed to ${newemail}. If you don't remember changing your e-mail, change your password and e-mail immediatelly!`);
             res.type('.html');
             res.render('userDetails', {
                 errMsg: '', successMsg: 'E-mail address successfully changed!', loginName, navbarActive: 5,

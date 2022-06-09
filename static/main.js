@@ -133,28 +133,3 @@ function revokeAdmin() {
         console.log(err);
     });
 }
-
-// -------------------------------- google maps api --------------------------------
-function loadMap() {
-    const attribution = new ol.control.Attribution({
-        collapsible: false,
-    });
-
-    const map = new ol.Map({
-        controls: ol.control.defaults({ attribution: false }).extend([attribution]),
-        layers: [
-            new ol.layer.Tile({
-                source: new ol.source.OSM({
-                    url: 'https://tile.openstreetmap.be/osmbe/{z}/{x}/{y}.png',
-                }),
-            }),
-        ],
-        target: 'map',
-        view: new ol.View({
-            center: ol.proj.fromLonLat([4.35247, 50.84673]),
-            minZoom: 16,
-            maxZoom: 18,
-            zoom: 17,
-        }),
-    });
-}

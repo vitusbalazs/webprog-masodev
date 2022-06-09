@@ -20,6 +20,9 @@ router.get('/details/:id', async (req, res) => {
         const advertisement = await getAdvertisementByID(advID);
         const userUploaded = await getUserFromID(advertisement.UserID);
         const photos = await getPhotosByID(advID);
+        let mapsAddres = advertisement.Address;
+        mapsAddres = mapsAddres.concat(' ', advertisement.City);
+        mapsAddres = mapsAddres.replaceAll(' ', '%20');
         let userFromDB;
         if (loginName) {
             userFromDB = await getUserFromName(loginName);
@@ -27,18 +30,18 @@ router.get('/details/:id', async (req, res) => {
             userFromDB = { role: 'guest' };
         }
         res.render('details', {
-            errMsg: '', successMsg: '', advertisement, photos, loginName, userUploaded, navbarActive: 1, localUser: userFromDB,
+            errMsg: '', successMsg: '', advertisement, photos, loginName, userUploaded, navbarActive: 1, localUser: userFromDB, mapsAddres,
         });
     } catch (err) {
         res.render('details', {
-            errMsg: 'An error occured while trying to display the advertisements', successMsg: '', advertisements: [], loginName, navbarActive: 1,
+            errMsg: 'An error occured while trying to display the advertisements', successMsg: '', advertisements: [], loginName, navbarActive: 1, mapsAddres: '',
         });
     }
 });
 
 router.post('/details/uploadphoto/:id', async (req, res) => {
     const AdvID = req.params.id;
-
+    const loginName = getCurrentUser(req) || undefined;
     try {
         const fileHandler = req.files.pFile;
 
@@ -57,7 +60,9 @@ router.post('/details/uploadphoto/:id', async (req, res) => {
 
         res.redirect(`/advertisement/details/${AdvID}`);
     } catch (err) {
-        console.log(err);
+        res.render('details', {
+            errMsg: 'Uploading photo failed', successMsg: '', advertisements: [], loginName, navbarActive: 1, mapsAddres: '',
+        });
     }
 });
 
@@ -84,12 +89,15 @@ router.delete('/deletePhoto/:id', async (req, res) => {
 });
 
 router.use('/delete', async (req, res) => {
+    const loginName = getCurrentUser(req) || undefined;
     try {
         const advID = req.query.AdvertisementID;
         await deleteAdvertisementByID(advID);
         res.redirect('/list');
     } catch (err) {
-        console.log(err);
+        res.render('list', {
+            errMsg: 'An error occured while deleting the advertisement', successMsg: '', advertisements: [], loginName, navbarActive: 1,
+        });
     }
 });
 
