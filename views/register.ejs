@@ -21,20 +21,23 @@
     <% } else if (successMsg) { %>
         <div class="alert alert-success" role="alert"><%= successMsg %></div>
     <% } %>
-    <form method="POST" action="/user/login" class="col-md-3 center-form">
+    <form method="POST" action="/user/register" class="col-md-3 center-form">
         <div class="form-group">
-            <label for="lUsername">Username</label>
-            <input type="text" class="form-control" name="lUsername" id="lUsername" placeholder="Username">
+            <label for="rUsername">Username</label>
+            <input type="text" class="form-control" name="rUsername" id="rUsername" placeholder="Username" required>
         </div>
         <div class="form-group">
-            <label for="lPassword">Password</label>
-            <input type="password" class="form-control" name="lPassword" id="lPassword" placeholder="Password">
+            <label for="rEmail">E-mail address</label>
+            <input type="email" class="form-control" name="rEmail" id="rEmail" placeholder="E-mail address" required>
+        </div>
+        <div class="form-group">
+            <label for="rPassword">Password</label>
+            <input type="password" class="form-control" name="rPassword" id="rPassword" placeholder="Password" required>
         </div>
         <br>
         <div class="form-group">
-            <input type="submit" class="form-control btn btn-danger" value="Login">
+            <input type="submit" class="form-control btn btn-danger" value="Register">
         </div>
-        <a href="/user/forgotPassword"><input type="button" class="btn btn-outline-danger col-12" style="margin-top: 10px;" value="Forgot my password..."></a>
     </form>
 </body>
 </html>

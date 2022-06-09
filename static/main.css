@@ -16,36 +16,9 @@
 
 form {
     background-color: white;
-    margin: 10px;
-    display: flex;
-    flex-direction: column;
     border: 1px solid black;
-    width: 300px;
-}
-
-form > * {
+    padding: 10px;
     margin: 5px;
-}
-
-form > p {
-    text-align: center;
-}
-
-#lista {
-    border: 1px solid black;
-}
-
-#lista > .list-item {
-    background-color: tomato;
-    border: 3px solid coral;
-    margin: 10px;
-    color: white;
-}
-
-.details {
-    border: 1px solid rgb(246, 80, 19);
-    background-color: coral;
-    color: white;
     border-radius: 5px;
 }
 

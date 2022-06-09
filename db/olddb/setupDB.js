@@ -5,7 +5,7 @@ const connectionPool = mysql2.createPool({
     port: 3306,
     user: 'root',
     password: 'root',
-    database: 'Lakashirdetesek',
+    database: 'HomeAds',
     connectionLimit: 5,
 });
 
@@ -16,7 +16,7 @@ export function createAdvertisementsTable() {
 }
 
 export function createUsersTable() {
-    return connectionPool.query('CREATE TABLE IF NOT EXISTS felhasznalo (FID INT AUTO_INCREMENT, Nev VARCHAR(50), Jelszo VARCHAR(128), Szerep VARCHAR(30), PRIMARY KEY (FID));');
+    return connectionPool.query('CREATE TABLE IF NOT EXISTS users (ID INT AUTO_INCREMENT, Name TEXT, Password TEXT, Role TEXT, PRIMARY KEY (ID));');
 }
 
 export function createPhotosTable() {

@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset='utf-8'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <title><%= advertisement.Address %>, <%= advertisement.City %></title>
+    <meta name='viewport' content='width=device-width, initial-scale=1'>
+
+    <link rel='stylesheet' type='text/css' media='screen' href='/main.css'>
+    <script src='/main.js'></script>
+    
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+    <link rel="stylesheet" href="https://cdn.rawgit.com/openlayers/openlayers.github.io/master/en/v5.3.0/css/ol.css" type="text/css">
+</head>
+<body>
+    <%- include('partials/navbar.ejs') %>
+
+    <% if (!errMsg) { %>
+        <!-- <div class="btn-group" id="detailsGroup">
+            <button class="btn btn-success"><i class="fa fa-money"></i> Buy</button>
+            <button class="btn btn-danger"><i class="fa fa-exclamation-triangle"></i> Delete</button>
+            <button class="btn btn-secondary"><i class="fa fa-backward"></i> Back</button>
+        </div> -->
+        <% if (successMsg) { %>
+            <div class="alert alert-success" role="alert"><%= successMsg %></div>
+        <% } %>
+
+        <% if (userUploaded.username === loginName || localUser.role === 'admin') { %>
+            <br>
+            <a href="/advertisement/delete?AdvertisementID=<%= advertisement.ID %>"><button class="btn btn-outline-danger center-form-x"><i class="fa fa-trash"></i> Delete advertisement</button></a>
+            <br><br>
+        <% } %>
+
+        <div class="card center-form-x">
+            <div class="card-body">
+                <h5 class="card-title">ID: <%= advertisement.ID %></div>
+                <p class="card-text">Address: <%= advertisement.Address %></p>
+                <p class="card-text">City: <%= advertisement.City %></p>
+                <p class="card-text">Surface area: <%= advertisement.Surface %> m²</p>
+                <p class="card-text">Price: <%= advertisement.Price %> RON</p>
+                <p class="card-text">Number of rooms: <%= advertisement.Rooms %></p>
+                <p class="card-text">Date added: <%= advertisement.Date %></p>
+                <p class="card-text">Uploaded by: <%= userUploaded.username %></p>
+            </div>
+        </div>
+
+        <p id="photoDeleteError" style="color: red;"></p>
+        <ul class="list-group">
+            <% photos.forEach((photo) => { %>
+                <li id="photo<%= photo._id %>" class="list-group-item">
+                    <img src="<%= photo.Path %>" class="advertisementPhoto center-form-x">
+                    <% if (userUploaded.username === loginName || localUser.role === 'admin') { %>
+                        <button id="<%= photo._id %>" class="btn btn-outline-danger" onclick="deletePhoto(this.id);"><i class="fa fa-trash"></i> Delete photo</button>
+                    <% } %>
+                </li>
+            <% }) %>
+        </ul>
+
+        <h1 class="display-4" style="text-align: center;">Because the Google Geocoder API is not for free, I couldn't fetch the latitude and longitude of a given address -> The map will point on Belgium instead</h1>
+        <div id="map" class="center-form-x" style="width: 500px; height: 500px;"></div>
+
+        <% if (loginName == userUploaded.username) { %>
+            <form method="POST" action="/advertisement/details/uploadphoto/<%= advertisement.ID %>" enctype="multipart/form-data" class="col-md-3 col-lg-3 col-sm-5 col-xs-8 center-form-x">
+                <div class="form-group">
+                    <label for="pFile">Select a file</label>
+                    <input type="file" name="pFile" id="pFile" class="form-control" required>
+                </div>
+                <br>
+                <div class="form-group">
+                    <button type="submit" class="form-control btn btn-danger"><i class="fa fa-upload"></i> Upload</button>
+                </div>
+            </form>
+        <% } %>
+
+        <script src="https://cdn.rawgit.com/openlayers/openlayers.github.io/master/en/v5.3.0/build/ol.js"></script>
+
+        <script>
+            loadMap();
+        </script>
+
+    <% } else { %>
+        <div class="alert alert-danger" role="alert"><%= errMsg %></div>
+    <% } %>
+</body>
+</html>
