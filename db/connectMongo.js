@@ -2,7 +2,7 @@ import { MongoClient } from 'mongodb';
 
 let connection;
 
-const url = 'mongodb+srv://vitusbalazs:lollop111@homeads.3uwdlat.mongodb.net/?retryWrites=true&w=majority';
+const url = 'REMOVED DUE TO SECURITY ISSUES (PUBLIC REPO)';
 const dbName = 'HomeAds';
 
 export async function connectDB() {
