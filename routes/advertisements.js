@@ -10,8 +10,6 @@ import {
 
 const router = new Router();
 
-// google maps api key: AIzaSyCH4U2pxbUxYq_nfJZ0pSszFxOM0k9kWEA
-
 router.get('/details/:id', async (req, res) => {
     res.type('.html');
     const loginName = getCurrentUser(req) || undefined;
