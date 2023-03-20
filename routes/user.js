@@ -19,7 +19,7 @@ function sendEmail(email, subject, text) {
         requireTLS: true,
         auth: {
             user: 'vitusb01@gmail.com',
-            pass: 'dfthchxxwnfquyuk',
+            pass: 'REMOVED DUE TO SECURITY ISSUES (PUBLIC REPO)',
         },
     });
     const mailOptions = {
